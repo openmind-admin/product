@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDI Offering Strategy & Roadmap 2026–2028</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a14;
+    --bg2: #0e0e1a;
+    --cdi: #5158ff;
+    --cdi-light: #7b80ff;
+    --p1: #5158ff;
+    --p2: #5fd4a9;
+    --p3: #ff9d5c;
+    --p4: #e06090;
+    --p5: #f0c050;
+    --text: #c8c8d4;
+    --dim: #888899;
+    --bright: #e8e8f0;
+    --green: #5fd4a9;
+    --yellow: #f0c050;
+    --red: #e06060;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    zoom: 1.5;
+  }
+
+  /* === SLIDE SYSTEM === */
+  .slide { position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    overflow-y: auto;
+  }
+  .slide-inner { max-width: 1040px;
+    width: 100%;
+  }
+  .slide.wide .slide-inner { max-width: 1200px; }
+
+  /* Staggered entrance */
+  .slide .s-el {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .slide.active .s-el {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .slide.active .s-el:nth-child(1) { transition-delay: 0.1s; }
+  .slide.active .s-el:nth-child(2) { transition-delay: 0.2s; }
+  .slide.active .s-el:nth-child(3) { transition-delay: 0.3s; }
+  .slide.active .s-el:nth-child(4) { transition-delay: 0.4s; }
+  .slide.active .s-el:nth-child(5) { transition-delay: 0.5s; }
+  .slide.active .s-el:nth-child(6) { transition-delay: 0.6s; }
+  .slide.active .s-el:nth-child(7) { transition-delay: 0.7s; }
+  .slide.active .s-el:nth-child(8) { transition-delay: 0.8s; }
+  .slide.active .s-el:nth-child(9) { transition-delay: 0.9s; }
+  .slide.active .s-el:nth-child(10) { transition-delay: 1.0s; }
+
+  /* === TYPOGRAPHY === */
+  .s-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--cdi);
+    margin-bottom: 10px;
+  }
+  .s-title { font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  .s-subtitle {
+    font-size: 18px;
+    color: var(--bright);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .s-prose { font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .hl { color: var(--cdi-light); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-yellow { color: var(--yellow); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+
+  /* === PROGRESS BAR === */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--cdi);
+    transition: width 0.4s ease;
+    z-index: 200;
+  }
+
+  /* === NAV === */
+  .nav-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(10,10,20,0.85);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 28px;
+    padding: 8px 20px;
+    backdrop-filter: blur(12px);
+  }
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--dim);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    font-family: inherit;
+  }
+  .nav-btn:hover { color: white; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-counter {
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 1px;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* === PILLAR CARDS === */
+  .pillar-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .pillar-card {
+    flex: 1;
+    min-width: 150px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 3px solid;
+    transition: background 0.2s;
+  }
+  .pillar-card:hover { background: rgba(255,255,255,0.05); }
+  .pillar-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .pillar-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .pillar-desc {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  /* === COVERAGE GRID === */
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: 160px repeat(5, 1fr);
+    gap: 2px;
+    margin: 20px 0;
+    font-size: 12px;
+  }
+  .cg-header {
+    background: rgba(255,255,255,0.06);
+    padding: 10px 12px;
+    font-weight: 600;
+    color: var(--bright);
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .cg-header:first-child { text-align: left; }
+  .cg-product {
+    padding: 8px 12px;
+    font-weight: 500;
+    color: var(--bright);
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+  }
+  .cg-cell {
+    padding: 8px;
+    text-align: center;
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cg-strong { background: rgba(95,212,169,0.12); color: var(--green); font-weight: 600; }
+  .cg-partial { background: rgba(240,192,80,0.08); color: var(--yellow); }
+  .cg-gap { background: rgba(224,96,96,0.06); color: rgba(224,96,96,0.5); }
+  .cg-cell .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .dot-strong { background: var(--green); box-shadow: 0 0 8px rgba(95,212,169,0.4); }
+  .dot-partial { background: var(--yellow); opacity: 0.7; }
+  .dot-gap { background: rgba(224,96,96,0.3); }
+
+  /* === DEMAND LIST === */
+  .demand-list {
+    margin: 16px 0;
+  }
+  .demand-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0 -8px;
+    transition: background 0.15s;
+  }
+  .demand-item:hover {
+    background: rgba(255,255,255,0.02);
+  }
+  .demand-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+  .demand-item.open .demand-detail {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 8px;
+  }
+  .demand-detail-inner {
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .demand-detail-inner strong { color: white; }
+  .demand-expand-hint {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .demand-item.open .demand-expand-hint { transform: rotate(90deg); }
+  .demand-rank {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cdi-light);
+    min-width: 30px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .demand-content { flex: 1; }
+  .demand-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .demand-evidence {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+  .demand-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* === ROADMAP === */
+  .year-block {
+    margin: 16px 0;
+    padding: 16px 20px;
+    border-left: 3px solid;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+  }
+  .year-label {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 2px;
+  }
+  .year-theme {
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .year-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .year-item {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    padding-left: 16px;
+    position: relative;
+  }
+  .year-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+  }
+
+  /* === QUOTE === */
+  .quote-block {
+    border-left: 2px solid var(--cdi);
+    padding: 12px 20px;
+    margin: 14px 0;
+    font-style: italic;
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .quote-attr {
+    font-style: normal;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 6px;
+  }
+
+  /* === STAT ROW === */
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-num {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+
+  /* === STRENGTH METER (clickable) === */
+  .strength-item {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .strength-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin: 0 -8px;
+  }
+  .strength-row:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .strength-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bright);
+    min-width: 200px;
+  }
+  .strength-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .strength-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .strength-tag {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 60px;
+    text-align: right;
+  }
+  .strength-expand-hint {
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+    transition: transform 0.2s, color 0.2s;
+    min-width: 16px;
+    text-align: center;
+  }
+  .strength-item.open .strength-expand-hint {
+    transform: rotate(90deg);
+    color: rgba(255,255,255,0.5);
+  }
+  .strength-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    opacity: 0;
+  }
+  .strength-item.open .strength-detail {
+    max-height: 600px;
+    opacity: 1;
+  }
+  .strength-detail-inner {
+    padding: 10px 12px 16px 12px;
+    margin: 0 0 8px 0;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .sd-methodology {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .sd-methodology strong { color: rgba(255,255,255,0.5); }
+  .sd-product {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 12px;
+  }
+  .sd-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .sd-product-name {
+    font-weight: 600;
+    color: white;
+    min-width: 160px;
+  }
+  .sd-product-note {
+    color: var(--dim);
+    font-size: 11px;
+  }
+  .sd-gap-box {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .sd-gap-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  /* === COMPETITIVE GRID === */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .comp-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .comp-card:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+  }
+  .comp-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .comp-desc {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+  .comp-overlap {
+    font-size: 10px;
+    margin-top: 6px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  .comp-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+  .comp-card.open .comp-detail {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 10px;
+  }
+  .comp-detail-inner {
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .comp-vs {
+    margin-top: 6px;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(81,88,255,0.06);
+    color: var(--cdi-light);
+    line-height: 1.5;
+  }
+
+  /* === NEXT STEPS === */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .action-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .action-owner {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--cdi-light);
+    margin-bottom: 4px;
+  }
+  .action-desc {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* === HERO SPECIFIC === */
+  .hero-center { text-align: center; }
+  .hero-title { font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--cdi-light);
+    letter-spacing: 4px;
+    margin-bottom: 32px;
+  }
+  .hero-org {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--cdi);
+    margin-bottom: 16px;
+  }
+
+  /* === PILLAR DETAIL === */
+  .pd-products {
+    margin: 12px 0;
+  }
+  .pd-product {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .pd-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* Engagement model flow */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 16px 0;
+    flex-wrap: nowrap;
+  }
+  .flow-step {
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+  }
+  .flow-step-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 2px;
+  }
+  .flow-step-desc {
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+  .flow-arrow {
+    font-size: 16px;
+    color: var(--dim);
+  }
+
+  /* Keyboard hint */
+  .key-hint {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+    z-index: 100;
+  }
+
+  @media (max-width: 768px) {
+    .slide { padding: 40px 24px; }
+    .hero-title { font-size: 36px; }
+    .s-title { font-size: 30px; }
+    .coverage-grid { font-size: 10px; grid-template-columns: 120px repeat(5, 1fr); }
+    .comp-grid { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+    .pillar-row { flex-direction: column; }
+    .stat-row { flex-direction: column; }
+  }
+  /* === DEMO TRIGGER (clickable inline terms) === */
+  .demo-trigger {
+    color: var(--cdi-light);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(81,88,255,0.3);
+    text-underline-offset: 3px;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .demo-trigger:hover {
+    text-decoration-color: var(--cdi-light);
+    text-shadow: 0 0 12px rgba(81,88,255,0.3);
+  }
+  .demo-trigger::after {
+    content: ' ↗';
+    font-size: 0.7em;
+    opacity: 0.5;
+    vertical-align: super;
+  }
+
+  /* === DEMO MODAL === */
+  .demo-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,12,0.92);
+    backdrop-filter: blur(16px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    zoom: calc(1 / 1.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 40px;
+  }
+  .demo-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .demo-modal {
+    max-width: 780px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--bg2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+  }
+  .demo-overlay.open .demo-modal {
+    transform: translateY(0);
+  }
+  .demo-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: inherit;
+    z-index: 10;
+  }
+  .demo-close:hover { color: white; }
+  .demo-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(81,88,255,0.12);
+    color: var(--cdi-light);
+    margin-bottom: 12px;
+  }
+  .demo-title {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+  .demo-subtitle {
+    font-size: 14px;
+    color: var(--dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  /* === WIREFRAME STYLES === */
+  .wf-container {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .wf-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 16px;
+  }
+  /* Agent flow diagram */
+  .wf-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 12px 0;
+  }
+  .wf-step {
+    flex: 1;
+    padding: 14px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+    position: relative;
+  }
+  .wf-step:first-child { border-radius: 8px 0 0 8px; }
+  .wf-step:last-child { border-radius: 0 8px 8px 0; }
+  .wf-step-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .wf-step-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 2px;
+  }
+  .wf-step-desc {
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+  .wf-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    font-size: 14px;
+    color: var(--cdi);
+  }
+  /* Mock UI elements */
+  .wf-mockup {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .wf-titlebar {
+    background: rgba(255,255,255,0.04);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .wf-dot-row { display: flex; gap: 5px; }
+  .wf-dot-r { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+  .wf-titlebar-text {
+    font-size: 11px;
+    color: var(--dim);
+    margin-left: 8px;
+  }
+  .wf-body {
+    padding: 16px;
+  }
+  .wf-input {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--dim);
+    margin: 8px 0;
+  }
+  .wf-suggestion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(81,88,255,0.04);
+    border: 1px solid rgba(81,88,255,0.1);
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .wf-suggestion-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .wf-chat-bubble {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    max-width: 85%;
+    margin: 6px 0;
+  }
+  .wf-chat-ai {
+    background: rgba(81,88,255,0.08);
+    border: 1px solid rgba(81,88,255,0.12);
+    color: var(--text);
+    margin-right: auto;
+  }
+  .wf-chat-user {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--bright);
+    margin-left: auto;
+    text-align: right;
+  }
+  .wf-chat-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  /* Dashboard wireframe */
+  .wf-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .wf-metric {
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .wf-metric-val {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+  }
+  .wf-metric-label {
+    font-size: 10px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+  .wf-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 80px;
+    padding: 8px 0;
+  }
+  .wf-bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+  }
+  .wf-bar-label {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  /* Certification pathway */
+  .wf-pathway {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 12px 0;
+  }
+  .wf-pathway-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-left: 2px solid rgba(255,255,255,0.08);
+    margin-left: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+  .wf-pathway-step::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--bg);
+  }
+  .wf-pathway-step:last-child { border-left-color: transparent; }
+  .wf-pathway-content { flex: 1; }
+  .wf-pathway-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+  }
+  .wf-pathway-desc {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  .demo-why {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(95,212,169,0.04);
+    border: 1px solid rgba(95,212,169,0.1);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .demo-why strong { color: var(--green); }
+
+  @media (max-width: 768px) {
+    .demo-modal { padding: 20px; }
+    .demo-title { font-size: 22px; }
+    .wf-flow { flex-direction: column; }
+    .wf-step:first-child { border-radius: 8px 8px 0 0; }
+    .wf-step:last-child { border-radius: 0 0 8px 8px; }
+    .wf-arrow { transform: rotate(90deg); justify-content: center; padding: 4px 0; }
+    .wf-dashboard { grid-template-columns: 1fr; }
+  }
+
+  /* Product popups */
+  #prod-popup-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000;
+    justify-content: center; align-items: center;
+    zoom: calc(1 / 1.5);
+  }
+  #prod-popup-overlay.open { display: flex; }
+  #prod-popup {
+    background: #1a1a2e; border-radius: 12px; padding: 24px 28px;
+    max-width: 380px; width: 90%; position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  #prod-popup .pp-close {
+    position: absolute; top: 12px; right: 16px; background: none; border: none;
+    color: rgba(255,255,255,0.4); font-size: 18px; cursor: pointer; padding: 4px;
+  }
+  #prod-popup .pp-close:hover { color: white; }
+  #prod-popup .pp-name { font-size: 18px; font-weight: 700; color: white; margin-bottom: 6px; }
+  #prod-popup .pp-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 10px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 14px;
+  }
+  #prod-popup .pp-badge.exists { background: rgba(95,212,169,0.15); color: #5fd4a9; }
+  #prod-popup .pp-badge.in-dev { background: rgba(240,192,80,0.15); color: #f0c050; }
+  #prod-popup .pp-badge.planned { background: rgba(81,88,255,0.15); color: #7b80ff; }
+  #prod-popup .pp-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 14px; }
+  #prod-popup .pp-evolution-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  #prod-popup .pp-evolution { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+  .prod-link {
+    cursor: pointer; display: inline-block; padding: 2px 7px; border-radius: 4px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    text-decoration: none; transition: background 0.15s, border-color 0.15s;
+    line-height: 1.3; margin: 1px;
+  }
+  .prod-link:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.22); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ============================== -->
+<!-- SLIDE 0: TITLE                   -->
+<!-- ============================== -->
+<div class="slide active" data-slide="0">
+  <div class="slide-inner hero-center">
+    <div class="s-el hero-org">Constructive Dialogue Institute</div>
+    <div class="s-el hero-title">Offering Strategy &amp;<br>Roadmap</div>
+    <div class="s-el hero-sub">2026 – 2028</div>
+    <div class="s-el" style="font-size: 15px; color: var(--text); max-width: 560px; margin: 0 auto; line-height: 1.7;">
+      Where we're strong, where the opportunity is, and a three-year plan to deepen our impact — organized around the Five Pillars of Campus Culture Change.
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ============================== -->
+<!-- SLIDE 1: OUTLINE                 -->
+<!-- ============================== -->
+<div class="slide" data-slide="1">
+  <div class="slide-inner hero-center">
+    <div class="s-el s-label">Overview</div>
+    <div class="s-el s-title" style="margin-bottom: 32px;">The Shape of This Deck</div>
+    <div class="s-el" style="max-width: 560px; margin: 0 auto; text-align: left;">
+      <div style="display: flex; align-items: baseline; margin-bottom: 20px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--cdi-light); min-width: 28px;">I.</div>
+        <div>
+          <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 4px;">The Challenge</div>
+          <div style="font-size: 13px; color: var(--dim); line-height: 1.5;">Building a field <em>and</em> competing in one</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: baseline; margin-bottom: 20px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--cdi-light); min-width: 28px;">II.</div>
+        <div>
+          <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 4px;">The Framework</div>
+          <div style="font-size: 13px; color: var(--dim); line-height: 1.5;">Two dimensions of campus culture change</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: baseline; margin-bottom: 20px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--cdi-light); min-width: 28px;">III.</div>
+        <div>
+          <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 4px;">The Ecosystem</div>
+          <div style="font-size: 13px; color: var(--dim); line-height: 1.5;">Where the dimensions converge into offerings</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: baseline;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--cdi-light); min-width: 28px;">IV.</div>
+        <div>
+          <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 4px;">The Roadmap</div>
+          <div style="font-size: 13px; color: var(--dim); line-height: 1.5;">How we build it, year by year</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================== -->
+<!-- SLIDE 2: WHY THIS IS HARD        -->
+<!-- ============================== -->
+<!-- ============================== -->
+<!-- SLIDE 2: NORTH STAR + CULTURE   -->
+<!-- ============================== -->
+<div class="slide" data-slide="2">
+  <div class="slide-inner">
+    <div class="s-el s-label">I. The Challenge</div>
+    <div class="s-el s-title">North Star</div>
+
+    <div class="s-el" style="background: rgba(81,88,255,0.06); border: 1px solid rgba(81,88,255,0.18); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--cdi-light); margin-bottom: 6px;">Metric</div>
+      <div style="font-size: 14px; color: var(--text); line-height: 1.6;">The number of campuses <strong style="color: white;">actively working to maintain a culture of constructive dialogue</strong>. Not campuses who bought something — campuses who are <em>doing the work</em>.</div>
+    </div>
+
+    <div class="s-el" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 16px 20px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--cdi-light); margin-bottom: 8px;">The Culture We're Building Toward</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6; font-style: italic; margin-bottom: 14px;">
+        "In a culture of inquiry and dialogue, curiosity drives exploration, multiple perspectives deepen understanding, and dialogue balances rigor with generosity. Lively intellectual exchanges challenge assumptions, spark discovery, and turn disagreement into a catalyst for growth and learning."
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div style="padding: 10px 14px; border-radius: 8px; background: rgba(81,88,255,0.06); border: 1px solid rgba(81,88,255,0.10);">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p1); margin-bottom: 4px;">Value pluralism</div>
+          <div style="font-size: 11px; color: var(--text); line-height: 1.5;">Foster meaningful engagement across varied backgrounds and viewpoints, while recognizing each individual's dignity.</div>
+        </div>
+        <div style="padding: 10px 14px; border-radius: 8px; background: rgba(95,212,169,0.06); border: 1px solid rgba(95,212,169,0.10);">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2); margin-bottom: 4px;">Champion open inquiry</div>
+          <div style="font-size: 11px; color: var(--text); line-height: 1.5;">Invite hard questions, conflicting perspectives, and intellectual honesty while embracing continuous learning.</div>
+        </div>
+        <div style="padding: 10px 14px; border-radius: 8px; background: rgba(255,157,92,0.06); border: 1px solid rgba(255,157,92,0.10);">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p3); margin-bottom: 4px;">Protect free expression</div>
+          <div style="font-size: 11px; color: var(--text); line-height: 1.5;">Safeguard the right to speak up while encouraging listening and accountability.</div>
+        </div>
+        <div style="padding: 10px 14px; border-radius: 8px; background: rgba(240,192,80,0.06); border: 1px solid rgba(240,192,80,0.10);">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p5); margin-bottom: 4px;">Build trust</div>
+          <div style="font-size: 11px; color: var(--text); line-height: 1.5;">Approach interactions with honesty and respect, and shape decisions through transparency and participation.</div>
+        </div>
+        <div style="padding: 10px 14px; border-radius: 8px; background: rgba(224,96,144,0.06); border: 1px solid rgba(224,96,144,0.10); grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p4); margin-bottom: 4px; text-align: center;">Promote constructive dialogue</div>
+          <div style="font-size: 11px; color: var(--text); line-height: 1.5; text-align: center;">Create conditions where differing perspectives are explored together with intellectual humility and the intention of advancing understanding.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 3: BUILDING A FIELD        -->
+<!-- ============================== -->
+<div class="slide wide" data-slide="3">
+  <div class="slide-inner">
+    <div class="s-el s-label">I. The Challenge</div>
+    <div class="s-el s-title">Building a Field <em style="font-weight: 400; color: var(--cdi-light);">and</em> Competing in One</div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 8px;">
+
+      <!-- LEFT COLUMN: The problem -->
+      <div>
+        <div style="font-size: 14px; color: var(--text); line-height: 1.7; margin-bottom: 16px;">The problem is multilevel — individual, institutional, and external factors all interact — and there is <strong style="color: white;">no known, reliably effective institutional model</strong> for creating and sustaining a culture of constructive dialogue. Competitors exist, but this is an emerging category most people don't know about yet.</div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: baseline;">
+            <div style="font-size: 12px; font-weight: 600; color: white; white-space: nowrap;">No category</div>
+            <div style="font-size: 11px; color: var(--dim); line-height: 1.4;">Nobody sells "campus culture change." Competitors own fragments — nobody holds the integrative frame.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: baseline;">
+            <div style="font-size: 12px; font-weight: 600; color: white; white-space: nowrap;">No standard buyer</div>
+            <div style="font-size: 11px; color: var(--dim); line-height: 1.4;">Provosts, student affairs VPs, state systems. The offering must flex across all of them.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: baseline;">
+            <div style="font-size: 12px; font-weight: 600; color: white; white-space: nowrap;">No proven ROI</div>
+            <div style="font-size: 11px; color: var(--dim); line-height: 1.4;">No industry benchmark. We must build the measurement and define what "success" means.</div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: var(--text); line-height: 1.6; padding: 10px 14px; background: rgba(81,88,255,0.04); border-left: 3px solid var(--cdi); border-radius: 4px;">
+          <strong style="color: white;">The implication:</strong> Our offering strategy can't follow conventional playbooks. We need a framework that organizes what we build, how we sell it, and how partners navigate it — all at once. That framework has <strong style="color: var(--cdi-light);">two dimensions</strong>.
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Competitive landscape -->
+      <div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--bright); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">Competitive Landscape</div>
+          <div style="font-size: 10px; color: var(--dim); margin-bottom: 8px; line-height: 1.4;">Two published landscape analyses — by <strong style="color: var(--text);">Campus Compact</strong> (most recent) and <strong style="color: var(--text);">Interfaith America</strong> (2024) — map direct competitors as vendors of dialogue programming to higher ed.</div>
+          <div style="font-size: 10px; font-weight: 600; color: var(--bright); margin-bottom: 6px; letter-spacing: 0.3px;">ESTABLISHED</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(240,192,80,0.08); border: 1px solid rgba(240,192,80,0.15); font-size: 10px;"><strong style="color: var(--text);">Interfaith America</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--p5); font-size: 9px;">P5</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Co-curricular + measurement</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(81,88,255,0.08); border: 1px solid rgba(81,88,255,0.15); font-size: 10px;"><strong style="color: var(--text);">Citizens &amp; Scholars</strong> <span style="color: var(--p1); font-size: 9px;">P1</span> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Campuswide immersion</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(255,157,92,0.08); border: 1px solid rgba(255,157,92,0.15); font-size: 10px;"><strong style="color: var(--text);">Braver Angels</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Event-based programming</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(224,96,144,0.08); border: 1px solid rgba(224,96,144,0.15); font-size: 10px;"><strong style="color: var(--text);">FIRE</strong> <span style="color: var(--p4); font-size: 9px;">P4</span> <span style="color: var(--p5); font-size: 9px;">P5</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Policy + campus climate surveys</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(255,157,92,0.08); border: 1px solid rgba(255,157,92,0.15); font-size: 10px;"><strong style="color: var(--text);">Essential Partners</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Facilitated dialogue</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.15); font-size: 10px;"><strong style="color: var(--text);">Heterodox Academy</strong> <span style="color: var(--p1); font-size: 9px;">P1</span> <span style="color: var(--p2); font-size: 9px;">P2</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Viewpoint diversity advocacy</span></span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; color: var(--yellow); margin-bottom: 6px; letter-spacing: 0.3px;">EMERGING &amp; GROWING</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(224,96,96,0.08); border: 1px solid rgba(224,96,96,0.15); font-size: 10px;"><strong style="color: var(--text);">Julia Minson / Harvard</strong> <span style="color: var(--p2); font-size: 9px;">P2</span> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Direct Perspectives overlap</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(240,192,80,0.06); border: 1px solid rgba(240,192,80,0.15); font-size: 10px;"><strong style="color: var(--text);">Sway</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">AI-mediated dialogue</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(240,192,80,0.06); border: 1px solid rgba(240,192,80,0.15); font-size: 10px;"><strong style="color: var(--text);">Viewpoints Project</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Student-led programming</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(240,192,80,0.06); border: 1px solid rgba(240,192,80,0.15); font-size: 10px;"><strong style="color: var(--text);">Dartmouth</strong> <span style="color: var(--p2); font-size: 9px;">P2</span> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Packaging for elite HS</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; background: rgba(240,192,80,0.06); border: 1px solid rgba(240,192,80,0.15); font-size: 10px;"><strong style="color: var(--text);">Vanderbilt</strong> <span style="color: var(--p3); font-size: 9px;">P3</span> <span style="color: var(--dim); font-size: 8px; font-style: italic;">Campus convening</span></span>
+          </div>
+          <div style="font-size: 11px; color: var(--dim); line-height: 1.4; font-style: italic;">No one operates across all five pillars. No one offers an institutional change framework. The field is real enough that funders are commissioning landscape analyses — and we're in a race to define it.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================== -->
+<!-- SLIDE 4: TWO DIMENSIONS          -->
+<!-- ============================== -->
+<div class="slide" data-slide="4">
+  <div class="slide-inner">
+    <div class="s-el s-label">II. The Framework</div>
+    <div class="s-el s-title">Two Dimensions of Culture Change</div>
+    <div class="s-el s-prose" style="">Campus culture change has a <em>structure</em> and an <em>arc</em>. The <strong style="color: white;">Five Pillars</strong> describe <em>what</em> needs to change — the structural anatomy of an institution. The <strong style="color: white;">Engagement Journey</strong> describes <em>where</em> an institution is in changing it — from first spark to sustained transformation. Our offering ecosystem lives at the intersection.</div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px;">
+      <div style="background: rgba(81,88,255,0.04); border: 1px solid rgba(81,88,255,0.12); border-radius: 12px; padding: 20px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--cdi-light); margin-bottom: 8px;">Axis 1 · The Structure</div>
+        <div style="font-size: 18px; font-weight: 700; color: white; margin-bottom: 8px;">The Five Pillars</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px;">What needs to change at an institution — leadership, curriculum, co-curricular life, policies, and measurement.</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(81,88,255,0.12); color: var(--p1);">P1</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(95,212,169,0.12); color: var(--p2);">P2</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(255,157,92,0.12); color: var(--p3);">P3</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(224,96,144,0.12); color: var(--p4);">P4</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(240,192,80,0.12); color: var(--p5);">P5</span>
+        </div>
+      </div>
+      <div style="background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.12); border-radius: 12px; padding: 20px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--yellow); margin-bottom: 8px;">Axis 2 · The Arc</div>
+        <div style="font-size: 18px; font-weight: 700; color: white; margin-bottom: 8px;">Phases of Institutional Culture Change</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px;">A phased process — not a rigid linear pathway, but a planning and diagnostic tool. A buying journey, a transformation pathway, and a readiness frame.</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(240,192,80,0.15); color: var(--p5);">Diagnostic</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(81,88,255,0.15); color: var(--p1);">Readiness Building</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(255,157,92,0.15); color: var(--p3);">Capacity Building</span>
+          <span style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(95,212,169,0.15); color: var(--p2);">Sustainment</span>
+        </div>
+      </div>
+    </div>
+    <div class="s-el" style="margin-top: 12px; text-align: center; font-size: 14px; color: var(--dim); font-style: italic;">
+      The next slides unpack each dimension. Then we show where they converge.
+    </div>
+  </div>
+</div>
+
+
+<!-- SLIDE 5: FIVE PILLARS            -->
+<!-- ============================== -->
+<div class="slide" data-slide="5">
+  <div class="slide-inner">
+    <div class="s-el s-label">II. The Framework</div>
+    <div class="s-el s-title">The Five Pillars as Offering Lens</div>
+    <div class="s-el s-prose">The Five Pillars are our north star — the framework that shapes which offerings we build, which gaps we prioritize, and how we measure whether we're fulfilling our mission.</div>
+    <div class="s-el pillar-row">
+      <div class="pillar-card" style="border-left-color: var(--p1);">
+        <div class="pillar-num" style="color: var(--p1);">Pillar 1</div>
+        <div class="pillar-name">Leadership Commitment</div>
+        <div class="pillar-desc">Presidents, trustees, and senior leaders visibly make dialogue an institutional priority</div>
+      </div>
+      <div class="pillar-card" style="border-left-color: var(--p2);">
+        <div class="pillar-num" style="color: var(--p2);">Pillar 2</div>
+        <div class="pillar-name">Curriculum and Pedagogy</div>
+        <div class="pillar-desc">Academic life prepares students to think independently, with nuance, across divides</div>
+      </div>
+      <div class="pillar-card" style="border-left-color: var(--p3);">
+        <div class="pillar-num" style="color: var(--p3);">Pillar 3</div>
+        <div class="pillar-name">Co&#8209;Curricular Experience</div>
+        <div class="pillar-desc">Students build relationships across differences; campus traditions sustain the culture</div>
+      </div>
+    </div>
+    <div class="s-el pillar-row">
+      <div class="pillar-card" style="border-left-color: var(--p4);">
+        <div class="pillar-num" style="color: var(--p4);">Pillar 4</div>
+        <div class="pillar-name">Policies, Processes, and Structures</div>
+        <div class="pillar-desc">Institutional policies and norms guided by principles of inquiry and dialogue</div>
+      </div>
+      <div class="pillar-card" style="border-left-color: var(--p5);">
+        <div class="pillar-num" style="color: var(--p5);">Pillar 5</div>
+        <div class="pillar-name">Measurement and Organizational Learning</div>
+        <div class="pillar-desc">Clear goals, metrics, and a feedback loop that drives continuous improvement</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 6: COVERAGE MAP            -->
+<!-- ============================== -->
+<div class="slide wide" data-slide="6">
+  <div class="slide-inner">
+    <div class="s-el s-label">II. The Framework</div>
+    <div class="s-el s-title">Offering Coverage by Pillar</div>
+    <div class="s-el s-prose" style="">Our offerings are concentrated in Pillars 2 and 3. The institutional change pillars have significant gaps — and significant opportunity.</div>
+    <div class="s-el" style="font-size: 12px; color: var(--dim); margin-top: -10px; margin-bottom: 12px;">Click any bar to see the evidence.</div>
+    <div class="s-el">
+
+      <!-- P1 -->
+      <div class="strength-item" onclick="this.classList.toggle('open')">
+        <div class="strength-row">
+          <div class="strength-label" style="color: var(--p1);">P1 · Leadership Commitment</div>
+          <div class="strength-bar-track"><div class="strength-bar" style="width: 45%; background: var(--p1);"></div></div>
+          <div class="strength-tag" style="color: var(--yellow);">Unscaled</div>
+          <div class="strength-expand-hint">›</div>
+        </div>
+        <div class="strength-detail"><div class="strength-detail-inner">
+          <div class="sd-methodology"><strong>Why "Unscaled":</strong> The Leadership Institute works — but it's invitation-only and serves 9 schools. Responding to Crisis is reactive, not proactive. The model is validated; the question is how to bring it to the other 100+ partners.</div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Leadership Institute</div><div class="sd-product-note">Strong but limited — 9 schools. 2-day summit + 8-month PLC + Learning Labs.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Responding to Crisis</div><div class="sd-product-note">Rapid-deployment support when campuses face polarizing events. Recently revised.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--yellow);"></div><div class="sd-product-name">Five Pillars Consulting</div><div class="sd-product-note">Consulting-dependent. Requires CDI in the room. Not yet offered as a scalable product.</div></div>
+          <div class="sd-gap-box" style="background: rgba(81,88,255,0.04); border: 1px solid rgba(81,88,255,0.1);">
+            <div class="sd-gap-label" style="color: var(--p1);">What's Missing</div>
+            Scalable leadership engagement beyond 9 schools. Columbia and CUNY have expressed interest in shorter-cycle, higher-touch variants.<br><br>State system channel (2026) tests whether P1 can scale through system-level governance.
+          </div>
+        </div></div>
+      </div>
+
+      <!-- P2 -->
+      <div class="strength-item" onclick="this.classList.toggle('open')">
+        <div class="strength-row">
+          <div class="strength-label" style="color: var(--p2);">P2 · Curriculum and Pedagogy</div>
+          <div class="strength-bar-track"><div class="strength-bar" style="width: 55%; background: var(--p2);"></div></div>
+          <div class="strength-tag" style="color: var(--yellow);">Growing</div>
+          <div class="strength-expand-hint">›</div>
+        </div>
+        <div class="strength-detail"><div class="strength-detail-inner">
+          <div class="sd-methodology"><strong>Why "Growing":</strong> Multiple offerings touch faculty development — Perspectives, Quiet Classroom, Contested Facts, Foundations. But they're sold as <em>standalones with no sequence</em>.<br><br>No connective tissue between completing a workshop and changing classroom practice. This is the #1 partner-validated offering gap.</div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Perspectives IP</div><div class="sd-product-note">Builds awareness and skills, but no course-integration support.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Quiet Classroom</div><div class="sd-product-note">1.5 hrs. Engagement strategies. Standalone.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Contested Facts</div><div class="sd-product-note">1.5 hrs. Handling contested claims. Standalone.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Foundations Workshop</div><div class="sd-product-note">5-hr intensive. Serves faculty but also deeply co-curricular.</div></div>
+          <div class="sd-gap-box" style="background: rgba(95,212,169,0.04); border: 1px solid rgba(95,212,169,0.1);">
+            <div class="sd-gap-label" style="color: var(--p2);">What's Missing</div>
+            No sequenced faculty PD pathway. No async follow-up. No curriculum integration support.<br><br>Faculty complete workshops but lack a pathway from single-time experiences into embedded classroom practice — the kind of connective tissue that makes dialogue part of the fabric of teaching, not a one-off event.
+          </div>
+        </div></div>
+      </div>
+
+      <!-- P3 -->
+      <div class="strength-item" onclick="this.classList.toggle('open')">
+        <div class="strength-row">
+          <div class="strength-label" style="color: var(--p3);">P3 · Co&#8209;Curricular Experience</div>
+          <div class="strength-bar-track"><div class="strength-bar" style="width: 85%; background: var(--p3);"></div></div>
+          <div class="strength-tag" style="color: var(--green);">Strong</div>
+          <div class="strength-expand-hint">›</div>
+        </div>
+        <div class="strength-detail"><div class="strength-detail-inner">
+          <div class="sd-methodology"><strong>Why "Strong":</strong> CDI's core. Three active offerings directly build co-curricular dialogue infrastructure. Perspectives is flagship. Foundations and DFC build progressively deeper capacity. Coherent and well-established.</div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Perspectives IP + Pilot</div><div class="sd-product-note">Flagship online learning. 6 modules, 2.5 hrs.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Foundations Workshop</div><div class="sd-product-note">5-hr intensive. Behavioral skill-building. Cap: 50.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">DFC</div><div class="sd-product-note">20-hr certification. Trains campus facilitators. Cap: 24.</div></div>
+          <div class="sd-gap-box" style="background: rgba(255,157,92,0.04); border: 1px solid rgba(255,157,92,0.1);">
+            <div class="sd-gap-label" style="color: var(--p3);">What's Missing</div>
+            Post-program follow-up. Custom facilitation isn't modular. No real-time facilitator tools (<span class="demo-trigger" onclick="openDemo('encounter')">see Encounter concept</span>). No self-serve toolkit.<br><br><span class="demo-trigger" onclick="openDemo('t3')">Train-the-Trainer</span> (80–90% of calls ask) would unlock P3 scale. Enhancement gaps, not foundational.
+          </div>
+        </div></div>
+      </div>
+
+      <!-- P4 -->
+      <div class="strength-item" onclick="this.classList.toggle('open')">
+        <div class="strength-row">
+          <div class="strength-label" style="color: var(--p4);">P4 · Policies, Processes, and Structures</div>
+          <div class="strength-bar-track"><div class="strength-bar" style="width: 25%; background: var(--p4);"></div></div>
+          <div class="strength-tag" style="color: var(--red);">Emerging</div>
+          <div class="strength-expand-hint">›</div>
+        </div>
+        <div class="strength-detail"><div class="strength-detail-inner">
+          <div class="sd-methodology"><strong>Why "Emerging":</strong> No dedicated P4 offering exists. Two offerings touch P4 indirectly. Policy coverage is a byproduct of other work, not a core focus.</div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--yellow);"></div><div class="sd-product-name">Five Pillars Consulting</div><div class="sd-product-note">Touches policy through strategic recommendations. Consulting-dependent.</div></div>
+          <div class="sd-gap-box" style="background: rgba(224,96,144,0.04); border: 1px solid rgba(224,96,144,0.1);">
+            <div class="sd-gap-label" style="color: var(--p4);">What's Missing</div>
+            Learn from consulting engagements what institutions actually need, then evolve the most common recommendations into scalable offerings — pending leadership alignment on scope and sequencing.
+          </div>
+        </div></div>
+      </div>
+
+      <!-- P5 -->
+      <div class="strength-item" onclick="this.classList.toggle('open')">
+        <div class="strength-row">
+          <div class="strength-label" style="color: var(--p5);">P5 · Measurement and Org. Learning</div>
+          <div class="strength-bar-track"><div class="strength-bar" style="width: 10%; background: var(--p5);"></div></div>
+          <div class="strength-tag" style="color: var(--red);">Nascent</div>
+          <div class="strength-expand-hint">›</div>
+        </div>
+        <div class="strength-detail"><div class="strength-detail-inner">
+          <div class="sd-methodology"><strong>Why "Nascent":</strong> CDI tells partners to measure their dialogue culture but provides <em>no tools to do so</em>. Only the Perspectives evidence base exists.<br><br>Funders have moved from requesting to <strong style="color: white;">requiring</strong> this. Field fragmented — Interfaith America, Citizens &amp; Scholars, <span title="Consortium on Financing Higher Education — ~35 selective institutions sharing institutional data and benchmarks" style="border-bottom: 1px dotted var(--dim); cursor: help;">COFHE</span> touching adjacent measurement.</div>
+          <div class="sd-product"><div class="sd-dot" style="background: var(--green);"></div><div class="sd-product-name">Perspectives Evidence Base</div><div class="sd-product-note">Research foundation — not yet partner-facing.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: rgba(224,96,96,0.5);"></div><div class="sd-product-name" style="color: var(--red);"><span class="demo-trigger" onclick="openDemo('measurement')">Measurement Learning Lab</span></div><div class="sd-product-note" style="color: var(--red);">UNBUILT. Survey instruments, benchmarking consortium, behavioral indicators. 2027 target.</div></div>
+          <div class="sd-product"><div class="sd-dot" style="background: rgba(224,96,96,0.5);"></div><div class="sd-product-name" style="color: var(--red);">Credentialing Infrastructure</div><div class="sd-product-note" style="color: var(--red);">UNBUILT. LinkedIn badges, <span title="National Association of Colleges and Employers — the standard competency framework used by career services and employers" style="border-bottom: 1px dotted var(--dim); cursor: help;">NACE</span> competencies. Currently manual PDFs. 2027 target.</div></div>
+          <div class="sd-gap-box" style="background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.1);">
+            <div class="sd-gap-label" style="color: var(--p5);">What's Missing</div>
+            "Is it working?" is the question CDI can't yet answer well. Partners with multiple touchpoints can't see cumulative impact — each program measured separately.<br><br><span class="demo-trigger" onclick="openDemo('measurement')">Measurement Learning Lab</span> (2027) closes the gap. Benchmarking consortium is a potential revenue-generating offering.
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+    <div class="s-el" style="margin-top: 16px; font-size: 13px; color: var(--dim); line-height: 1.6;">
+      <strong style="color: white;">The pattern:</strong> Excellent individual and co-curricular experiences, but culture change requires <em>all five pillars</em>. The gaps are also the opportunity — each one represents an unbuilt offering that partners are already asking for.
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 6: P1 LEADERSHIP           -->
+<!-- ============================== -->
+<div class="slide" data-slide="7">
+  <div class="slide-inner">
+    <div class="s-el s-label" style="color: var(--p1);">Pillar 1 · Leadership Commitment</div>
+    <div class="s-el s-title">Proven at the Top, Ready to Scale</div>
+    <div class="s-el s-prose">The Leadership Institute is CDI's most prestigious offering — a deep investment in senior leadership at nine elite institutions. The question is how to bring this level of engagement to the other 100+ partners.</div>
+    <div class="s-el stat-row">
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--p1);">9</div>
+        <div class="stat-label">schools in the<br>Leadership Institute</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: white;">2-day</div>
+        <div class="stat-label">summit + 8-month<br>PLC engagement</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--cdi-light);">3–4</div>
+        <div class="stat-label">Learning Labs on<br>shared priorities</div>
+      </div>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--text); line-height: 1.7;">
+      <strong style="color: white;">Learning Labs:</strong> Focused working sessions where the cohort tackles specific shared challenges — crisis response, institutional trust, integrating dialogue into strategic planning. The cohort identifies the priorities; CDI designs the sessions.
+    </div>
+    <div class="s-el" style="font-size: 12px; color: var(--dim); line-height: 1.5; margin-top: 8px;">
+      <strong style="color: white;">The 9:</strong> Brown, Dartmouth, Duke, Harvard, MIT, NYU, Tufts, Vanderbilt, Yale
+    </div>
+    <div class="s-el pd-products" style="margin-top: 8px;">
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Responding to Crisis</strong> <span style="color: var(--dim); margin-left: 8px;">— Rapid-deployment support when campuses face polarizing events. Recently revised.</span></div>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(81,88,255,0.04); border: 1px solid rgba(81,88,255,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--p1); margin-bottom: 4px;">THE OPPORTUNITY</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        Columbia and CUNY have expressed interest in shorter-cycle, higher-touch models.<br><br>The proposal: develop a <strong style="color: white;">tiered leadership engagement model</strong> — the full LI for deep partners, a shorter-cycle intensive for broader reach, and state-system coordination for institutional scale.<br><br>State system strategy (2026) tests whether P1 can scale through system-level governance.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 7: P2 CURRICULUM           -->
+<!-- ============================== -->
+<div class="slide" data-slide="8">
+  <div class="slide-inner">
+    <div class="s-el s-label" style="color: var(--p2);">Pillar 2 · Curriculum and Pedagogy</div>
+    <div class="s-el s-title">Offerings Exist, Pathway Doesn't</div>
+    <div class="s-el s-prose">Faculty complete our workshops — Quiet Classroom, Contested Facts, Perspectives — and leave inspired but without a clear path into sustained classroom practice.<br><br>The offerings work individually; what's missing is the arc.</div>
+    <div class="s-el pd-products">
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Quiet Classroom</strong> <span style="color: var(--dim); margin-left: 8px;">— Engagement strategies for when students won't talk. The starting point.</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Contested Facts</strong> <span style="color: var(--dim); margin-left: 8px;">— Handling politically charged claims. The next challenge.</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Perspectives (faculty track)</strong> <span style="color: var(--dim); margin-left: 8px;">— Builds awareness and dialogue skills. The foundation.</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Foundations Workshop</strong> <span style="color: var(--dim); margin-left: 8px;">— 5-hr intensive. Deep behavioral skill-building.</span></div>
+    </div>
+    <div class="s-el quote-block">
+      "What do I do on Monday?" is the question CDI doesn't yet answer comprehensively.
+      <div class="quote-attr">— CDI Strategy Roadmap, Faculty Classroom Integration section</div>
+    </div>
+    <div class="s-el" style="background: rgba(95,212,169,0.04); border: 1px solid rgba(95,212,169,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--p2); margin-bottom: 8px;">THE OPPORTUNITY</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px;">Build the connective tissue — weave constructive dialogue into the fabric of teaching so it becomes self-sustaining.</div>
+      <div style="display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; margin-bottom: 12px;">
+        <div style="flex: 1; min-width: 0; padding: 8px 10px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.18); border-radius: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2);">Awareness</div>
+          <div style="font-size: 9px; color: var(--dim); margin-top: 2px;">Perspectives</div>
+        </div>
+        <div style="color: var(--dim); font-size: 14px; flex-shrink: 0;">→</div>
+        <div style="flex: 1; min-width: 0; padding: 8px 10px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.18); border-radius: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2);">Engagement</div>
+          <div style="font-size: 9px; color: var(--dim); margin-top: 2px;">Quiet Classroom</div>
+        </div>
+        <div style="color: var(--dim); font-size: 14px; flex-shrink: 0;">→</div>
+        <div style="flex: 1; min-width: 0; padding: 8px 10px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.18); border-radius: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2);">Hard Content</div>
+          <div style="font-size: 9px; color: var(--dim); margin-top: 2px;">Contested Facts</div>
+        </div>
+        <div style="color: var(--dim); font-size: 14px; flex-shrink: 0;">→</div>
+        <div style="flex: 1; min-width: 0; padding: 8px 10px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.18); border-radius: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2);">Norms &amp; Practice</div>
+          <div style="font-size: 9px; color: var(--dim); margin-top: 2px;">Classroom culture</div>
+        </div>
+        <div style="color: var(--dim); font-size: 14px; flex-shrink: 0;">→</div>
+        <div style="flex: 1; min-width: 0; padding: 8px 10px; background: rgba(95,212,169,0.08); border: 1px solid rgba(95,212,169,0.18); border-radius: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--p2);">Follow-up</div>
+          <div style="font-size: 9px; color: var(--dim); margin-top: 2px;">Async resources</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text); line-height: 1.5;">A virtuous cycle: faculty practice begets student practice begets culture.<br><br>Longer-term, an <span class="demo-trigger" onclick="openDemo('syllabus')">AI syllabus review tool</span> could accelerate adoption — but the sequenced pathway comes first.</div>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--dim); margin-top: 10px; font-style: italic;">
+      From standalone workshops to an embedded professional development journey — this is how P2 becomes real.
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 8: P3 CO-CURRICULAR        -->
+<!-- ============================== -->
+<div class="slide" data-slide="9">
+  <div class="slide-inner">
+    <div class="s-el s-label" style="color: var(--p3);">Pillar 3 · Co&#8209;Curricular Experience</div>
+    <div class="s-el s-title">Our Core, Expanding</div>
+    <div class="s-el s-prose">Our core offering suite directly builds the co&#8209;curricular dialogue infrastructure campuses need. This is where CDI has the deepest offering coverage and the strongest evidence.</div>
+    <div class="s-el pd-products">
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Perspectives</strong> <span style="color: var(--dim); margin-left: 8px;">— Flagship online learning (6 modules, 2.5 hrs, blended).</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Foundations Workshop</strong> <span style="color: var(--dim); margin-left: 8px;">— 5-hr intensive. Behavioral skill-building. Cap: 50.</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">DFC (Dialogue Facilitation Cert)</strong> <span style="color: var(--dim); margin-left: 8px;">— 20 hrs. Trains individual campus facilitators. Cap: 24.</span></div>
+    </div>
+    <div class="s-el quote-block">
+      "Students build relationships across differences and practice the skills of open, respectful exchange. Student leaders, staff, and administrators model these values, while campus traditions and social norms sustain them."
+      <div class="quote-attr">— Five Pillars of Campus Culture Change, CDI (2025)</div>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--text); line-height: 1.6; background: rgba(255,157,92,0.04); border: 1px solid rgba(255,157,92,0.1); border-radius: 8px; padding: 14px 16px;">
+      <strong style="color: white;">DFC vs. <span class="demo-trigger" onclick="openDemo('t3')">Train-the-Trainer</span>:</strong> DFC trains <em>individual</em> campus facilitators — a 20-hour certification.<br><br>But partners want more: institutional licensing that lets them deliver CDI programs independently. That's the T3 proposal — DFC is the prerequisite, T3 is the scale unlock.
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--dim); margin-top: 10px;">
+      <strong style="color: white;">Remaining gaps:</strong> Post-program follow-up. Real-time facilitator tools (<span class="demo-trigger" onclick="openDemo('encounter')">Encounter</span>). Self-serve co&#8209;curricular toolkit. Enhancement gaps, not foundational.
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 9: P4 POLICIES             -->
+<!-- ============================== -->
+<div class="slide" data-slide="10">
+  <div class="slide-inner">
+    <div class="s-el s-label" style="color: var(--p4);">Pillar 4 · Policies, Processes, and Structures</div>
+    <div class="s-el s-title">Consulting Today, Offerings Tomorrow</div>
+    <div class="s-el s-prose">CDI touches institutional policy through consulting and task forces — but it's high-touch, CDI-dependent, and not scalable.<br><br>The same constraint as Pillar 1: we're in the room, but haven't built tools that work without us.</div>
+    <div class="s-el pd-products">
+      <div class="pd-product"><div class="pd-dot" style="background: var(--yellow);"></div><strong style="color: white;">Five Pillars Consulting</strong> <span style="color: var(--dim); margin-left: 8px;">— Makes strategic recommendations on institutional alignment.</span></div>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(224,96,144,0.04); border: 1px solid rgba(224,96,144,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--p4); margin-bottom: 4px;">THE OPPORTUNITY</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        P4 today is primarily consulting-driven. As we learn from partner engagements what institutions actually need, the most common recommendations can evolve into scalable offerings — governance audits, policy alignment toolkits, systemic awareness frameworks.<br><br>The transition requires leadership alignment on scope and sequencing.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 10: P5 MEASUREMENT          -->
+<!-- ============================== -->
+<div class="slide" data-slide="11">
+  <div class="slide-inner">
+    <div class="s-el s-label" style="color: var(--p5);">Pillar 5 · Measurement and Organizational Learning</div>
+    <div class="s-el s-title">The Biggest Gap — and Biggest Opportunity</div>
+    <div class="s-el s-prose">Funders have moved from requesting measurement to <em>requiring</em> it. CDI tells partners to measure their dialogue culture but provides no tools to do so. This is both our most urgent gap and our most exciting innovation space.</div>
+    <div class="s-el pd-products">
+      <div class="pd-product"><div class="pd-dot" style="background: var(--green);"></div><strong style="color: white;">Perspectives Evidence Base</strong> <span style="color: var(--dim); margin-left: 8px;">— Internal research on our own offerings. Not partner-facing.</span></div>
+      <div class="pd-product"><div class="pd-dot" style="background: var(--yellow);"></div><strong style="color: white;">Program-Specific Surveys</strong> <span style="color: var(--dim); margin-left: 8px;">— Each program measured separately. No unified view.</span></div>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--p5); margin-bottom: 4px;">THE OPPORTUNITY</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        LLMs create an entirely new paradigm for measuring dialogue. Instead of static surveys and numeric scoring, the assessor can be a conversational AI — one that participates in and analyzes dialogue, adapts to context, generates narrative feedback, and can't be gamed the way traditional assessments can.<br><br><strong style="color: white;">What better way to measure dialogue than through conversation itself?</strong><br><br>
+        This connects to:<br>
+        <span style="color: var(--p5);">●</span> <span class="demo-trigger" onclick="openDemo('genassess')">Generative assessment</span> — augments traditional measures with reflective narrative <span style="color: var(--yellow); font-size: 11px; font-weight: 600;">[EXPLORATORY — needs alignment with Research]</span><br>
+        <span style="color: var(--p5);">●</span> <span class="demo-trigger" onclick="openDemo('measurement')">Measurement Learning Lab</span> — partner-facing dashboard, benchmarking consortium<br>
+        <span style="color: var(--p5);">●</span> Administrative data proxies — institutional data that already exists:<br>
+        <span style="opacity: 0;">● </span>· Roommate change requests<br>
+        <span style="opacity: 0;">● </span>· Speaker cancellations<br>
+        <span style="opacity: 0;">● </span>· Cross-group participation
+      </div>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--p5); margin-top: 12px; font-style: italic;">
+      This is where CDI can differentiate. Interfaith America, FIRE, and <span title="Consortium on Financing Higher Education — ~35 selective institutions sharing institutional data and benchmarks" style="border-bottom: 1px dotted var(--dim); cursor: help;">COFHE</span>-style consortia are building traditional measurement. CDI has the opportunity to build something fundamentally different — measurement that embodies the dialogue it measures. <span style="color: var(--yellow);">The generative assessment concept is early-stage and requires alignment with the Research team before committing to a roadmap.</span>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--dim); margin-top: 8px;">
+      <strong style="color: white;">Timeline:</strong> Research landscape analysis (2026). <span class="demo-trigger" onclick="openDemo('measurement')">Measurement Learning Lab</span> (2027). Benchmarking consortium (2027-28).
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 11: THE ENGAGEMENT JOURNEY  -->
+<!-- ============================== -->
+<div class="slide" data-slide="12">
+  <div class="slide-inner">
+    <div class="s-el s-label">Axis 2 · The Arc</div>
+    <div class="s-el s-title">Phases of Institutional Culture Change</div>
+    <div class="s-el s-prose">Campus culture change unfolds through four phases — not a rigid linear pathway, but a planning and diagnostic tool for understanding what work is required next.<br><br>Phases can overlap, and institutions vary in starting points. But skipping phases creates risk: capacity building without readiness leads to localized efforts that fail to spread.</div>
+    <div class="s-el flow-row">
+      <div class="flow-step" style="border-color: var(--p5);">
+        <div class="flow-step-name" style="color: var(--p5);">Diagnostic</div>
+        <div class="flow-step-desc">Asset mapping +<br>needs assessment</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--p1);">
+        <div class="flow-step-name" style="color: var(--p1);">Readiness Building</div>
+        <div class="flow-step-desc">Leadership alignment +<br>institutional commitment</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--p3);">
+        <div class="flow-step-name" style="color: var(--p3);">Capacity Building</div>
+        <div class="flow-step-desc">Training, programs,<br>structural alignment</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--p2);">
+        <div class="flow-step-name" style="color: var(--p2);">Sustainment</div>
+        <div class="flow-step-desc">Evidence-based iteration +<br>institutional learning</div>
+      </div>
+    </div>
+    <div class="s-el" style="font-size: 13px; color: var(--text); line-height: 1.7; margin-top: 8px;">
+      <strong style="color: white;">Most CDI partners today are in the Diagnostic or Readiness Building phases. Capacity Building is where most of our current offerings live — but our learning has made clear that it alone is insufficient for durable culture change.</strong>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(95,212,169,0.04); border: 1px solid rgba(95,212,169,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--p2); margin-bottom: 4px;">EMERGING OPPORTUNITY: PARTNER NETWORK</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.7;">
+        Partners report that culture change work is <em>lonely</em> — they want peer connection, case studies, and live exchange with others doing similar work. A community layer connecting partners to each other — not just to CDI — strengthens every engagement model.<br><br>
+        An inter-institutional consortium for dialogue and culture change could become a 2028 offering:<br>
+        <strong style="color: white;">Shared learning</strong> — cross-campus case studies and peer exchange<br>
+        <strong style="color: white;">Benchmarking data</strong> — comparative measurement across institutions<br>
+        <strong style="color: white;">Collective advocacy</strong> — a unified voice for the field<br>
+        <strong style="color: white;">Network effect</strong> — makes CDI's ecosystem stickier
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 12: PARTNER DEMANDS         -->
+<!-- ============================== -->
+<div class="slide" data-slide="13">
+  <div class="slide-inner">
+    <div class="s-el s-label">III. The Ecosystem</div>
+    <div class="s-el s-title">Discovery Slate</div>
+    <div class="s-el s-prose">Five initiatives approved for exploration — not to build yet.<br><br>Each explores a partner-validated need through research, co-design, and concept testing.</div>
+    <div class="s-el" style="font-size: 12px; color: var(--dim); margin-top: -10px; margin-bottom: 12px;">Click any item for deeper evidence.</div>
+    <div class="s-el demand-list">
+
+      <div class="demand-item" onclick="this.classList.toggle('open')">
+        <div class="demand-rank">1</div>
+        <div class="demand-content">
+          <div class="demand-title">Culture Change Entry Points</div>
+          <div class="demand-evidence">Three variants being explored: strategic planning retreats, low-cost diagnostic entry point, and campus dialogue mapping. No low-barrier entry currently exists for motivated but resource-constrained institutions.</div>
+          <div class="demand-detail"><div class="demand-detail-inner">
+            <strong>What we're exploring:</strong> How to create multiple on-ramps to CDI work for institutions with different readiness and resource levels. Strategic planning retreats for advanced leaders. Low-cost diagnostic climate survey as entry point. Dialogue mapping as institutional assessment.<br><br>
+            <strong>Pillars:</strong> <span style="color: var(--p1);">■ P1 Leadership Commitment</span> + <span style="color: var(--p5);">■ P5 Measurement and Organizational Learning</span>. Effective entry points are what sustain leadership buy-in and provide measurement foundation.<br><br>
+            <strong>What exists:</strong> Leadership Institute (9 schools, full model). No structured diagnostic on-ramp. No dialogue mapping toolkit.<br><br>
+            <strong>Next steps:</strong> Needs ID and market scan Q2–Q3 2026. Co-design with 2–3 partners. Concept testing fall 2026. Go/no-go decision Q1 2027.
+          </div></div>
+        </div>
+        <div class="demand-expand-hint">›</div>
+      </div>
+
+      <div class="demand-item" onclick="this.classList.toggle('open')">
+        <div class="demand-rank">2</div>
+        <div class="demand-content">
+          <div class="demand-title">Longitudinal Analytics &amp; Year-over-Year Reporting</div>
+          <div class="demand-evidence">Funders are requiring multi-year trend data. CUNY Year 3 contract requires it. Highest-pressure external signal.</div>
+          <div class="demand-detail"><div class="demand-detail-inner">
+            <strong>What we're exploring:</strong> Longitudinal measurement infrastructure that lets partners see trends across years — not just annual snapshots. Multi-year dashboards, cohort tracking, institutional benchmarking over time.<br><br>
+            <strong>Pillars:</strong> <span style="color: var(--p5);">■ P5 Measurement and Organizational Learning</span> (primary). This is what makes evidence credible to funders and boards.<br><br>
+            <strong>What exists:</strong> Program-specific surveys. No unified cross-year reporting. No benchmarking consortium.<br><br>
+            <strong>Next steps:</strong> Measurement landscape analysis + evidence scan Q2 2026. Co-design reporting dashboard with CUNY and 1–2 other partners. Concept testing Q3–Q4 2026. Go/no-go decision Q1 2027.
+          </div></div>
+        </div>
+        <div class="demand-expand-hint">›</div>
+      </div>
+
+      <div class="demand-item" onclick="this.classList.toggle('open')">
+        <div class="demand-rank">3</div>
+        <div class="demand-content">
+          <div class="demand-title">Configurable Perspectives</div>
+          <div class="demand-evidence">Partners reject 2–5 hour commitments. Faculty want plug-and-play modules. Hypothesis: one flexible architecture could address shorter programs, modular content, and lower cost.</div>
+          <div class="demand-detail"><div class="demand-detail-inner">
+            <strong>What we're exploring:</strong> A Perspectives redesign that lets partners use modules independently — shorter formats (sub-one-hour), configurable live programs, personalized pathways.<br><br>Hypothesis: modular architecture solves both time and cost access barriers simultaneously.<br><br>
+            <strong>Pillars:</strong> <span style="color: var(--p2);">■ P2 Curriculum and Pedagogy</span> + <span style="color: var(--p3);">■ P3 Co-Curricular Experience</span>. Modularity enables both faculty embedding and co-curricular flexibility.<br><br>
+            <strong>What exists:</strong> Perspectives as monolithic 2.5-hr program. No sub-one-hour options. No per-seat pricing.<br><br>
+            <strong>Next steps:</strong> Concept brief and needs ID Q2 2026. Co-design modular architecture with 2–3 partners. Prototype and concept testing Q3–Q4 2026. Go/no-go decision Q1 2027.
+          </div></div>
+        </div>
+        <div class="demand-expand-hint">›</div>
+      </div>
+
+      <div class="demand-item" onclick="this.classList.toggle('open')">
+        <div class="demand-rank">4</div>
+        <div class="demand-content">
+          <div class="demand-title">Skill Maintenance + Implementation Support</div>
+          <div class="demand-evidence">No structured path after Foundations/DFC completion. Duke example shows demand. Overlaps with post-Perspectives practice.</div>
+          <div class="demand-detail"><div class="demand-detail-inner">
+            <strong>What we're exploring:</strong> How to keep Foundations and DFC graduates re-engaged after certification. Skill maintenance pathways, community of practice structures, recertification touchpoints, deployment as peer facilitators.<br><br>
+            <strong>Pillars:</strong> <span style="color: var(--p3);">■ P3 Co-Curricular Experience</span>. Alumni support deepens institutional capacity and extends impact.<br><br>
+            <strong>What exists:</strong> No structured alumni engagement after any CDI program. Graduates complete and disconnect.<br><br>
+            <strong>Next steps:</strong> Needs ID with existing DFC grads Q2 2026. Co-design alumni support model with 1–2 partners. Pilot Q3–Q4 2026 alongside new platform. Go/no-go decision Q1 2027.
+          </div></div>
+        </div>
+        <div class="demand-expand-hint">›</div>
+      </div>
+
+      <div class="demand-item" onclick="this.classList.toggle('open')">
+        <div class="demand-rank">5</div>
+        <div class="demand-content">
+          <div class="demand-title">Structured Practice Sessions Post-Perspectives</div>
+          <div class="demand-evidence">Most frequently cited missing piece after Perspectives. No formal follow-on pathway. Shares infrastructure with skill maintenance initiative.</div>
+          <div class="demand-detail"><div class="demand-detail-inner">
+            <strong>What we're exploring:</strong> Structured opportunities for Perspectives graduates to practice dialogue skills across the academic year:<br>
+            · Facilitated issue-based discussions<br>
+            · Peer learning cohorts<br>
+            · DFC grad deployment as peer facilitators<br><br>
+            <strong>Pillars:</strong> <span style="color: var(--p3);">■ P3 Co-Curricular Experience</span> + <span style="color: var(--p2);">■ P2 Curriculum and Pedagogy</span>. Post-program practice is what turns a workshop into lasting skill development.<br><br>
+            <strong>What exists:</strong> No structured path after Perspectives completion. Graduates return to campus with no sustained practice opportunity.<br><br>
+            <strong>Next steps:</strong> Needs ID and concept development Q2 2026. Co-design with 2–3 partners and DFC grads. Pilot alongside new platform H1 2027. Go/no-go decision Q1 2027.
+          </div></div>
+        </div>
+        <div class="demand-expand-hint">›</div>
+      </div>
+
+
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(81,88,255,0.04); border: 1px solid rgba(81,88,255,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--cdi-light); margin-bottom: 4px;">NOTE ON TRAIN-THE-TRAINER</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        Train-the-Trainer is referenced in 80–90% of partnership calls. Scoping is underway separately, with pilot timelines aligned to the 2026 priority slate.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 13: THE CDI ECOSYSTEM       -->
+<!-- ========================= -->
+<div class="slide wide" data-slide="14">
+  <div class="slide-inner">
+    <div class="s-el s-label">III. The Ecosystem</div>
+    <div class="s-el s-title">The CDI Ecosystem</div>
+    <div class="s-el" style="font-size: 14px; color: var(--dim); margin-bottom: 12px;">Every cell is an offering or service. The diagnostic tells you which ones you need. Toggle to see the aspiration.</div>
+    <div class="s-el" style="font-size: 11px; color: var(--yellow); margin-bottom: 16px; padding: 8px 14px; background: rgba(240,192,80,0.05); border: 1px solid rgba(240,192,80,0.12); border-radius: 6px; display: inline-block;"><strong>Note:</strong> This matrix represents an aspirational view. Two distinct partner tracks — capacity building and full culture change — have not yet been aligned by leadership. Treat the 2028 view as directional, not committed.</div>
+
+    <!-- Toggle buttons -->
+    <div class="s-el" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 20px;">
+      <button class="eco-tab" onclick="toggleEcoView('today')" style="background: var(--cdi); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;">Today</button>
+      <button class="eco-tab" onclick="toggleEcoView('2028')" style="background: rgba(255,255,255,0.08); color: var(--dim); border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;">2028</button>
+    </div>
+
+    <!-- TODAY VIEW -->
+    <div id="eco-today" style="display: block;">
+      <div style="display: grid; grid-template-columns: 120px repeat(4, 1fr); gap: 2px; margin-bottom: 16px; font-size: 13px;">
+        <!-- Header row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 10px 6px; border-radius: 0;"></div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Diagnostic</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Readiness Building</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Capacity Building</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Sustainment</div>
+
+        <!-- P1 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p1);"><span style="color: var(--p1);">P1</span> Leadership</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: rgba(81,88,255,0.5); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('five-pillars-mapping')">Five Pillars asset mapping</span></div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('targeted-consulting')">Targeted consulting</span></div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('leadership-institute')">Leadership Institute (9 schools)</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+
+        <!-- P2 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p2);"><span style="color: var(--p2);">P2</span> Curriculum</div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('perspectives-faculty')">Perspectives (faculty track)</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: rgba(95,212,169,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('quiet-classroom')">Quiet Classroom</span><span class="prod-link" onclick="openProd('contested-facts')">Contested Facts</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: rgba(95,212,169,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+
+        <!-- P3 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p3);"><span style="color: var(--p3);">P3</span> Co-Curricular</div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('perspectives')">Perspectives</span><span class="prod-link" onclick="openProd('shorter-formats')">Shorter formats</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: rgba(255,157,92,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('dfc')">DFC</span><span class="prod-link" onclick="openProd('foundations')">Foundations</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: rgba(255,157,92,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+
+        <!-- P4 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p4);"><span style="color: var(--p4);">P4</span> Policies</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: rgba(224,96,144,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('five-pillars-consulting')">Five Pillars consulting</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: rgba(224,96,144,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+
+        <!-- P5 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p5);"><span style="color: var(--p5);">P5</span> Measurement</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(240,192,80,0.15); border-radius: 4px; font-size: 9px; color: rgba(240,192,80,0.4); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('evidence-base')">Perspectives Evidence Base</span></div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+        <div style="background: transparent; padding: 6px 8px; border: 1px dashed rgba(255,255,255,0.06); border-radius: 4px; font-size: 9px; color: rgba(255,255,255,0.25); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;">—</div>
+      </div>
+
+      <div style="font-size: 11px; color: var(--dim); text-align: center; font-style: italic; padding: 12px; background: rgba(224,96,96,0.04); border-radius: 4px;">
+        Strong in P3 Capacity Building. Gaps everywhere else. No measurement offerings. No post-program sustainment. Every sale is custom.
+      </div>
+    </div>
+
+    <!-- 2028 VIEW -->
+    <div id="eco-2028" style="display: none;">
+      <div style="display: grid; grid-template-columns: 120px repeat(4, 1fr); gap: 2px; margin-bottom: 16px; font-size: 13px;">
+        <!-- Header row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 10px 6px; border-radius: 0;"></div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Diagnostic</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Readiness Building</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Capacity Building</div>
+        <div style="background: rgba(255,255,255,0.06); padding: 10px 6px; border-radius: 0; font-size: 11px; font-weight: 600; color: var(--bright); text-align: center; letter-spacing: 0.5px;">Sustainment</div>
+
+        <!-- P1 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p1);"><span style="color: var(--p1);">P1</span> Leadership</div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('leadership-intro')">Leadership intro</span><span class="prod-link" onclick="openProd('diagnostic-onramp')">Diagnostic on-ramp</span></div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('five-pillars-mapping')">Five Pillars asset mapping</span></div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('targeted-consulting')">Targeted consulting</span></div>
+        <div style="background: rgba(81,88,255,0.08); padding: 6px 8px; border: 1px solid rgba(81,88,255,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('leadership-institute')">Leadership Institute</span><span class="prod-link" onclick="openProd('tiered-engagement')">Tiered engagement</span><span class="prod-link" onclick="openProd('state-system-coord')">State system coordination</span></div>
+
+        <!-- P2 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p2);"><span style="color: var(--p2);">P2</span> Curriculum</div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('perspectives-faculty')">Perspectives (faculty)</span><span class="prod-link" onclick="openProd('shorter-formats')">Shorter formats</span></div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('faculty-needs-assessment')">Faculty needs assessment</span></div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('faculty-pd')">Faculty PD</span><span class="prod-link" onclick="openProd('configurable-workshops')">Configurable workshops</span></div>
+        <div style="background: rgba(95,212,169,0.08); padding: 6px 8px; border: 1px solid rgba(95,212,169,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('modular-perspectives')">Modular Perspectives</span><span class="prod-link" onclick="openProd('sustainment')">Sustainment</span><span class="prod-link" onclick="openProd('t3-faculty')">T3 (faculty)</span><span class="prod-link" onclick="openProd('sector-tracks')">Sector tracks</span></div>
+
+        <!-- P3 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p3);"><span style="color: var(--p3);">P3</span> Co-Curricular</div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('perspectives')">Perspectives</span><span class="prod-link" onclick="openProd('shorter-formats')">Shorter</span><span class="prod-link" onclick="openProd('practice')">Practice</span></div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('program-review')">Program review</span><span class="prod-link" onclick="openProd('dialogue-mapping')">Dialogue mapping</span></div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('dfc')">DFC</span><span class="prod-link" onclick="openProd('foundations')">Foundations</span><span class="prod-link" onclick="openProd('encounter')">Encounter</span></div>
+        <div style="background: rgba(255,157,92,0.08); padding: 6px 8px; border: 1px solid rgba(255,157,92,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('sustainment')">Sustainment</span><span class="prod-link" onclick="openProd('credentialing')">Credentialing</span><span class="prod-link" onclick="openProd('t3-cert')">T3 certification</span><span class="prod-link" onclick="openProd('sector-tracks')">Sector tracks</span></div>
+
+        <!-- P4 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p4);"><span style="color: var(--p4);">P4</span> Policies</div>
+        <div style="background: rgba(224,96,144,0.08); padding: 6px 8px; border: 1px solid rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('systemic-awareness-intro')">Systemic awareness intro</span></div>
+        <div style="background: rgba(224,96,144,0.08); padding: 6px 8px; border: 1px solid rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('governance-audit')">Governance / policy audit</span></div>
+        <div style="background: rgba(224,96,144,0.08); padding: 6px 8px; border: 1px solid rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('targeted-consulting')">Targeted consulting</span></div>
+        <div style="background: rgba(224,96,144,0.08); padding: 6px 8px; border: 1px solid rgba(224,96,144,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('systemic-awareness-tools')">Systemic awareness tools</span><span class="prod-link" onclick="openProd('policy-audit-toolkit')">Policy audit toolkit</span></div>
+
+        <!-- P5 row -->
+        <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--p5);"><span style="color: var(--p5);">P5</span> Measurement</div>
+        <div style="background: rgba(240,192,80,0.08); padding: 6px 8px; border: 1px solid rgba(240,192,80,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('campus-diagnostic')">Campus Dialogue Diagnostic</span></div>
+        <div style="background: rgba(240,192,80,0.08); padding: 6px 8px; border: 1px solid rgba(240,192,80,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('baseline-measurement')">Baseline measurement</span></div>
+        <div style="background: rgba(240,192,80,0.08); padding: 6px 8px; border: 1px solid rgba(240,192,80,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('longitudinal-analytics')">Longitudinal analytics</span><span class="prod-link" onclick="openProd('generative-assessment')">Generative assessment</span></div>
+        <div style="background: rgba(240,192,80,0.08); padding: 6px 8px; border: 1px solid rgba(240,192,80,0.15); border-radius: 4px; font-size: 9px; color: var(--text); text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"><span class="prod-link" onclick="openProd('measurement-lab')">Measurement Lab</span><span class="prod-link" onclick="openProd('benchmarking')">Benchmarking</span><span class="prod-link" onclick="openProd('state-of-dialogue')">State of Dialogue Report</span></div>
+      </div>
+
+      <div style="font-size: 11px; color: var(--cdi-light); text-align: center; font-style: italic; padding: 12px; background: rgba(81,88,255,0.04); border-radius: 4px;">
+        Every cell has an offering. Every partner gets a diagnostic-driven roadmap through the matrix. CDI shifts from selling programs to selling individualized culture change.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 15: OFFERING LIFECYCLE        -->
+<!-- ============================== -->
+<div class="slide" data-slide="15">
+  <div class="slide-inner">
+    <div class="s-el s-label">IV. The Roadmap</div>
+    <div class="s-el s-title">How Ideas Become Offerings</div>
+    <div class="s-el s-prose" style="">Ideas enter from two directions — <strong style="color: white;">bottom-up</strong> (partner feedback, implementation signals, sales requests) and <strong style="color: white;">top-down</strong> (portfolio patterns, market shifts, strategic priorities).<br><br>Every idea follows the same lifecycle.</div>
+    <div class="s-el flow-row">
+      <div class="flow-step" style="border-color: var(--cdi-light);">
+        <div class="flow-step-name" style="color: var(--cdi-light);">Intake</div>
+        <div class="flow-step-desc">Capture signals<br>from partners + field</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--yellow);">
+        <div class="flow-step-name" style="color: var(--yellow);">Evaluate</div>
+        <div class="flow-step-desc">Assess against<br>strategic criteria</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--green);">
+        <div class="flow-step-name" style="color: var(--green);">Explore</div>
+        <div class="flow-step-desc">Research + co-design<br>No build commitment</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--p3);">
+        <div class="flow-step-name" style="color: var(--p3);">Build + Pilot</div>
+        <div class="flow-step-desc">Scoped build<br>1–3 institution test</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: var(--p4);">
+        <div class="flow-step-name" style="color: var(--p4);">Scale or Sunset</div>
+        <div class="flow-step-desc">Evidence-based<br>go/no-go decision</div>
+      </div>
+    </div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 14px 16px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Evaluation Criteria</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.7;">
+          <strong style="color: white;">Strategic alignment</strong> — does it advance the Five Pillars?<br>
+          <strong style="color: white;">Mission impact</strong> — does it deepen culture change?<br>
+          <strong style="color: white;">Revenue potential</strong> — can it sustain itself?<br>
+          <strong style="color: white;">Build feasibility</strong> — can we actually do this?<br>
+          <strong style="color: white;">Scalability</strong> — does it work beyond a handful of partners?<br>
+          <strong style="color: white;">Market demand</strong> — are partners asking for it?
+        </div>
+      </div>
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 14px 16px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Three Tracks</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.7;">
+          <strong style="color: white;">Full Cycle</strong> — new mechanisms of change, new audiences, real risk<br>
+          <strong style="color: white;">Extension</strong> — same theory of change, abbreviated path<br>
+          <strong style="color: white;">Iteration</strong> — annual revision cadence, content updates
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 16: 3-YEAR HORIZON          -->
+<!-- ============================== -->
+<div class="slide" data-slide="16">
+  <div class="slide-inner">
+    <div class="s-el s-label">IV. The Roadmap</div>
+    <div class="s-el s-title">Three-Year Horizon</div>
+    <div class="s-el s-prose" style="">Not a detailed feature list — a sense of what each year is <em>for</em>. Specific offerings will be governed by the development cycle and shaped by what we learn.</div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 12px;">
+      <!-- 2026 -->
+      <div style="background: rgba(81,88,255,0.05); border: 1px solid rgba(81,88,255,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 22px; font-weight: 700; color: var(--cdi-light); margin-bottom: 4px;">2026</div>
+        <div style="font-size: 12px; font-weight: 600; color: white; margin-bottom: 10px;">Explore + Build Foundation</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 10px;">Segal Grant funds exploration into five new audiences. Simultaneously building the infrastructure and operating systems to scale.</div>
+        <div style="font-size: 10px; color: var(--dim); line-height: 1.6;">
+          <span style="color: var(--cdi-light);">●</span> AI coaching launch (Perspectives)<br>
+          <span style="color: var(--p2);">●</span> Faculty classroom integration scoping<br>
+          <span style="color: var(--p5);">●</span> Measurement landscape analysis<br>
+          <span style="color: var(--p1);">●</span> Segal audience exploration begins<br>
+          <span style="color: var(--dim);">●</span> Offering lifecycle + strategy docs finalized
+        </div>
+      </div>
+      <!-- 2027 -->
+      <div style="background: rgba(255,157,92,0.05); border: 1px solid rgba(255,157,92,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 22px; font-weight: 700; color: var(--p3); margin-bottom: 4px;">2027</div>
+        <div style="font-size: 12px; font-weight: 600; color: white; margin-bottom: 10px;">Launch + Scale What Works</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 10px;">Segal exploration concludes — first pilots of new offerings launch. Measurement infrastructure goes partner-facing.</div>
+        <div style="font-size: 10px; color: var(--dim); line-height: 1.6;">
+          <span style="color: var(--p5);">●</span> Measurement Learning Lab + benchmarking<br>
+          <span style="color: var(--p3);">●</span> Discovery slate → pilot launches<br>
+          <span style="color: var(--p1);">●</span> State system + multi-campus pilots<br>
+          <span style="color: var(--p2);">●</span> Modular Perspectives architecture<br>
+          <span style="color: var(--dim);">●</span> Audience-specific offerings from Segal
+        </div>
+      </div>
+      <!-- 2028 -->
+      <div style="background: rgba(240,192,80,0.05); border: 1px solid rgba(240,192,80,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 22px; font-weight: 700; color: var(--yellow); margin-bottom: 4px;">2028</div>
+        <div style="font-size: 12px; font-weight: 600; color: white; margin-bottom: 10px;">Deepen + Integrate</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 10px;">Full pillar coverage. Longitudinal evidence. Cross-institutional benchmarking. The offering system becomes self-reinforcing.</div>
+        <div style="font-size: 10px; color: var(--dim); line-height: 1.6;">
+          <span style="color: var(--p4);">●</span> P4 offerings emerge from consulting learning<br>
+          <span style="color: var(--p5);">●</span> State of Dialogue Conditions report<br>
+          <span style="color: var(--cdi-light);">●</span> Longitudinal evidence across partners<br>
+          <span style="color: var(--p3);">●</span> Cross-sector learning cohorts<br>
+          <span style="color: var(--dim);">●</span> Sustainment infrastructure operational
+        </div>
+      </div>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(81,88,255,0.04); border: 1px solid rgba(81,88,255,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--cdi-light); margin-bottom: 4px;">THE THROUGHLINE</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        Each year builds on the last. 2026 generates the evidence and infrastructure. 2027 turns learning into launched offerings. 2028 connects them into the integrated culture change system the Five Pillars describe.<br><br>The development cycle ensures nothing ships without validation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 17: PARTNER TRACKS           -->
+<!-- ============================== -->
+<div class="slide" data-slide="17">
+  <div class="slide-inner">
+    <div class="s-el s-label">IV. The Roadmap</div>
+    <div class="s-el s-title">Every Campus Gets a Different Path</div>
+    <div class="s-el s-prose" style="">Two distinct partner tracks exist — and leadership has not yet fully aligned on how they fit together. The diagnostic determines which track a partner enters.</div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
+      <div style="background: rgba(255,157,92,0.05); border: 1px solid rgba(255,157,92,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--p3); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Track A · The Majority</div>
+        <div style="font-size: 17px; font-weight: 700; color: white; margin-bottom: 8px;">Capacity Building</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.6;">
+          Most current partnerships. Partners adopt CDI programs — Perspectives, Foundations, DFC, workshops — to build skills and capacity. Often starts with a single offering and grows.<br><br>
+          <strong style="color: white;">What they get:</strong><br>
+          · Training<br>
+          · Facilitated experiences<br>
+          · Structured practice<br>
+          · Skills development across students, faculty, and staff<br><br>
+          <span style="color: var(--dim); font-style: italic;">This is where most of CDI's current revenue and partner relationships live.</span>
+        </div>
+      </div>
+      <div style="background: rgba(81,88,255,0.05); border: 1px solid rgba(81,88,255,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--cdi-light); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Track B · The Aspiration</div>
+        <div style="font-size: 17px; font-weight: 700; color: white; margin-bottom: 8px;">Full Culture Change</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.6;">
+          Institutions pursuing all four phases — diagnostic through sustainment — across multiple pillars. Deep engagement, multi-year commitment, whole-institution transformation.<br><br>
+          <strong style="color: white;">What they get:</strong> The full Five Pillars journey —<br>
+          · Diagnostic<br>
+          · Readiness building<br>
+          · Capacity building<br>
+          · Measurement<br>
+          · Structural alignment<br><br>
+          <span style="color: var(--dim); font-style: italic;">This is the North Star — but requires alignment on how it connects to Track A.</span>
+        </div>
+      </div>
+    </div>
+    <div class="s-el" style="margin-top: 16px; background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--yellow); margin-bottom: 4px;">OPEN QUESTION FOR LEADERSHIP</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        How do Tracks A and B fit together? Is capacity building an on-ramp to culture change, or a fundamentally different service line?<br><br>The answer shapes pricing, packaging, team structure, and the story we tell partners. This needs to be resolved before the ecosystem matrix and roadmap are finalized.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLIDE 18: 2026 PRIORITIES         -->
+<!-- ============================== -->
+<div class="slide wide" data-slide="18">
+  <div class="slide-inner">
+    <div class="s-el s-label">Year of Foundation</div>
+    <div class="s-el s-title">2026 Priorities: Segal Grant + Building Infrastructure</div>
+    <div class="s-el" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+      
+      <!-- Left column: The Segal Grant -->
+      <div style="background: rgba(81,88,255,0.06); border: 1px solid rgba(81,88,255,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--cdi-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">The Segal Grant</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+          <strong style="color: white;">18-month exploration portfolio</strong> (July 2026 – Jan 2028)<br><br>
+          <strong>Five audience tracks:</strong>
+          <ul style="margin: 8px 0 8px 16px; padding: 0;">
+            <li><span style="color: var(--p2);">Faculty:</span> Learning Lab + Research (parallel tracks)</li>
+            <li><span style="color: var(--p1);">Presidents:</span> Coaching soft-launch + Aspen partnership</li>
+            <li><span style="color: var(--p4);">Deans:</span> Months 5–9</li>
+            <li><span style="color: var(--p4);">Admin Leaders:</span> Months 9–13</li>
+            <li>Trustees: Months 11–18</li>
+          </ul>
+          <strong>Each track:</strong> needs ID → market/evidence scan → co-design → concept testing → go/no-go recommendation<br><br>
+          <strong>What this tells you:</strong> What's in our 2026 pipeline. Where new audience expansion happens. What becomes portfolio priority for 2027+.
+        </div>
+      </div>
+
+      <!-- Right column: Building Infrastructure -->
+      <div style="background: rgba(95,212,169,0.06); border: 1px solid rgba(95,212,169,0.12); border-radius: 10px; padding: 18px;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--green); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Parallel Infrastructure Builds</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+          <strong style="color: white;">Operating systems and tools</strong> that let us scale what works:
+          <ul style="margin: 8px 0 8px 16px; padding: 0;">
+            <li><strong>Offering lifecycle:</strong> How ideas enter pipeline → evaluate → pilot → scale</li>
+            <li><strong>Offering strategy:</strong> Operating system doc — where are we going long-term?</li>
+            <li><strong>Measurement strategy:</strong> Long-term evaluation and evidence architecture</li>
+            <li><strong>Perspectives product strategy:</strong> Roadmap for modular, configurable, multi-format future</li>
+            <li><strong>LMS infrastructure:</strong> Shoring up the platform for scale</li>
+            <li><strong>AI experimentation:</strong> Testing and learning on where AI augments our work</li>
+          </ul>
+          <strong>Product thinking:</strong> Building capacity across the org to think like product managers
+        </div>
+      </div>
+    </div>
+
+    <div class="s-el" style="background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.12); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--yellow); margin-bottom: 4px;">2026 IS A RESEARCH + BUILD YEAR</div>
+      <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+        The Segal Grant funds exploration into five new audiences. Meanwhile, we're building the operating infrastructure that will let us scale efficiently once we know what works.<br><br>By end of 2026, we'll have a much clearer picture of what gets built in 2027 — the year of expansion.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">←</button>
+  <div class="nav-counter" id="navCounter">1 / 19</div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+<div class="key-hint">← → arrow keys to navigate</div>
+
+<!-- PRODUCT POPUP -->
+<div id="prod-popup-overlay">
+  <div id="prod-popup">
+    <button class="pp-close" onclick="closeProd()">✕</button>
+    <div class="pp-name" id="pp-name"></div>
+    <div class="pp-badge" id="pp-badge"></div>
+    <div class="pp-desc" id="pp-desc"></div>
+    <div class="pp-evolution-label" id="pp-evo-label"></div>
+    <div class="pp-evolution" id="pp-evo"></div>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const bar = document.getElementById('progressBar');
+  const counter = document.getElementById('navCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    bar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  function navigate(dir) {
+    goTo(current + dir);
+    const hint = document.querySelector('.key-hint');
+    if (hint) hint.style.display = 'none';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+  });
+
+  goTo(0);
+
+  // Demo modals
+  function openDemo(id) {
+    event.stopPropagation();
+    document.getElementById('demo-' + id).classList.add('open');
+  }
+  function closeDemo(id) {
+    document.getElementById('demo-' + id).classList.remove('open');
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('demo-overlay')) {
+      e.target.classList.remove('open');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.demo-overlay.open').forEach(d => d.classList.remove('open'));
+      closeProd();
+    }
+  });
+
+  document.getElementById('prod-popup-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'prod-popup-overlay') closeProd();
+  });
+
+  // Ecosystem toggle
+  function toggleEcoView(view) {
+    document.getElementById('eco-today').style.display = view === 'today' ? 'block' : 'none';
+    document.getElementById('eco-2028').style.display = view === '2028' ? 'block' : 'none';
+    document.querySelectorAll('.eco-tab').forEach(t => {
+      t.style.background = 'rgba(255,255,255,0.08)';
+      t.style.color = 'var(--dim)';
+    });
+    event.target.style.background = 'var(--cdi)';
+    event.target.style.color = 'white';
+  }
+
+  // Product popup system
+  const products = {
+    // P1 - Leadership
+    'leadership-intro': {
+      name: 'Leadership Introduction',
+      status: 'planned',
+      desc: 'A short-format experience for campus leadership — presidents, provosts, deans — that builds shared language around constructive dialogue and frames the Five Pillars as a strategic framework for institutional culture change.',
+      evolution: '2027: Design and pilot with Leadership Institute partners. 2028: Standardize as the entry point for all new institutional partnerships.'
+    },
+    'diagnostic-onramp': {
+      name: 'Diagnostic On-Ramp',
+      status: 'in-dev',
+      desc: 'The initial engagement touchpoint where prospective partners take a lightweight version of the Campus Dialogue Diagnostic. Generates a snapshot that makes the case for deeper engagement.',
+      evolution: '2026-27: Build as part of measurement infrastructure. 2028: Integrated into sales pipeline — every prospect gets a diagnostic before a proposal.'
+    },
+    'five-pillars-mapping': {
+      name: 'Five Pillars Asset Mapping',
+      status: 'exists',
+      desc: 'A structured assessment process that maps a campus\'s existing dialogue-related programs, policies, and infrastructure across all five pillars. Reveals strengths and gaps to guide investment.',
+      evolution: '2027: Formalize into a standardized tool with reporting dashboard. 2028: Connect to diagnostic data for richer institutional profiles.'
+    },
+    'targeted-consulting': {
+      name: 'Targeted Consulting',
+      status: 'exists',
+      desc: 'Custom advisory engagements where CDI staff work directly with campus teams on specific challenges — from program design to policy review to measurement strategy. Currently delivered ad hoc.',
+      evolution: '2027: Develop structured consulting packages by pillar. 2028: Tiered consulting model — light-touch advisory vs. deep embedded support.'
+    },
+    'leadership-institute': {
+      name: 'Leadership Institute',
+      status: 'exists',
+      desc: 'CDI\'s flagship leadership program bringing together senior campus leaders from ~9 institutions for sustained peer learning, strategic planning, and accountability around dialogue-centered culture change.',
+      evolution: '2027: Expand cohort size and add tiered engagement levels. 2028: Add alumni track and sector-specific cohorts (e.g., law schools, state systems).'
+    },
+    'tiered-engagement': {
+      name: 'Tiered Engagement Model',
+      status: 'planned',
+      desc: 'A structured framework for ongoing leadership engagement beyond the initial Leadership Institute — with light-touch, mid-level, and deep partnership tiers based on institutional readiness and commitment.',
+      evolution: '2027-28: Design tiers aligned with engagement model stages. Pilot with Leadership Institute alumni.'
+    },
+    'state-system-coord': {
+      name: 'State System Coordination',
+      status: 'planned',
+      desc: 'Infrastructure for working with multi-campus state systems — coordinated rollouts, cross-campus benchmarking, system-level reporting, and centralized contract management.',
+      evolution: '2027: Scope with 1-2 prospective state systems. 2028: Launch with standardized multi-campus engagement model.'
+    },
+
+    // P2 - Curriculum
+    'perspectives-faculty': {
+      name: 'Perspectives (Faculty Track)',
+      status: 'exists',
+      desc: 'CDI\'s core program adapted for faculty audiences — builds dialogue skills and provides tools for integrating constructive dialogue into teaching practice. Currently the primary faculty-facing offering.',
+      evolution: '2027: Add shorter format options (half-day, 90-min). 2028: Modular version with configurable content tracks by discipline.'
+    },
+    'shorter-formats': {
+      name: 'Shorter Program Formats',
+      status: 'in-dev',
+      desc: 'Condensed versions of core CDI programs — 90-minute workshops, half-day intensives, lunch-and-learns — designed to lower the barrier to entry and fit into existing campus schedules.',
+      evolution: '2026-27: Develop and pilot shorter Perspectives and introductory formats. 2028: Full catalog of short-format options across all programs.'
+    },
+    'faculty-needs-assessment': {
+      name: 'Faculty Needs Assessment',
+      status: 'planned',
+      desc: 'A diagnostic tool specific to P2 (Curriculum & Pedagogy) that assesses faculty readiness, pedagogical confidence with dialogue, and institutional support for teaching innovation.',
+      evolution: '2027: Design as component of the broader diagnostic framework. 2028: Deploy as standard step before faculty PD recommendations.'
+    },
+    'faculty-pd': {
+      name: 'Faculty Professional Development Pathway',
+      status: 'in-dev',
+      desc: 'A structured multi-stage development arc for faculty — from introductory workshops through advanced pedagogy to becoming campus dialogue champions. Goes beyond one-off programs.',
+      evolution: '2026-27: Design pathway architecture and pilot initial sequences. 2028: Full pathway with credentialing milestones.'
+    },
+    'configurable-workshops': {
+      name: 'Configurable Workshops',
+      status: 'planned',
+      desc: 'A modular workshop system where CDI can assemble custom faculty development experiences from standardized components — mixing topics, depth, and duration to fit specific campus needs.',
+      evolution: '2027-28: Build modular content library and assembly framework. Pilot with partners requesting customized faculty PD.'
+    },
+    'modular-perspectives': {
+      name: 'Modular Perspectives',
+      status: 'in-dev',
+      desc: 'A redesigned version of Perspectives where content modules can be mixed, matched, and sequenced based on audience needs — enabling sustainment through ongoing engagement rather than one-time delivery.',
+      evolution: '2026-27: Identify modular breakpoints in existing Perspectives. 2028: Fully modular system with per-module measurement.'
+    },
+    'sustainment': {
+      name: 'Post-Program Sustainment',
+      status: 'in-dev',
+      desc: 'Structured follow-up after initial program delivery — practice sessions, skill maintenance, peer accountability, and implementation support that prevents skills from fading after the workshop ends.',
+      evolution: '2026-27: Design sustainment framework and pilot with current partners. 2028: Standard offering bundled with all programs.'
+    },
+    't3-faculty': {
+      name: 'T3: Train-the-Trainer (Faculty)',
+      status: 'in-dev',
+      desc: 'A certification pathway that enables faculty to independently deliver CDI content and methodologies within their institution — building internal capacity and reducing dependence on CDI facilitators.',
+      evolution: '2026-27: Scope certification requirements and pilot structure. 2028: Full T3 program with quality assurance and tiered certification.'
+    },
+    'sector-tracks': {
+      name: 'Sector-Specific Tracks',
+      status: 'planned',
+      desc: 'Specialized content and delivery models tailored for specific higher ed sectors — law schools (TAMU Law as pilot), STEM programs, community colleges, professional schools — with relevant case studies and discipline-specific applications.',
+      evolution: '2026-27: TAMU Law as proof of concept. 2028: Develop 2-3 additional sector tracks based on demand.'
+    },
+
+    // P3 - Co-Curricular
+    'perspectives': {
+      name: 'Perspectives',
+      status: 'exists',
+      desc: 'CDI\'s flagship student-facing program — an immersive experience that builds foundational dialogue skills through structured encounters with different viewpoints. The core of CDI\'s co-curricular offering.',
+      evolution: '2027: Add shorter formats and practice sessions. 2028: Fully modular with sustainment pathway.'
+    },
+    'practice': {
+      name: 'Structured Practice Sessions',
+      status: 'in-dev',
+      desc: 'Post-Perspectives practice opportunities where students apply dialogue skills in guided settings — building the bridge between workshop learning and real-world application.',
+      evolution: '2026-27: Design and pilot practice session formats. 2028: Integrate with sustainment framework and credentialing.'
+    },
+    'program-review': {
+      name: 'Program Review',
+      status: 'planned',
+      desc: 'A structured review process for existing co-curricular programs that evaluates how well current offerings support dialogue skill development and identifies opportunities for CDI integration.',
+      evolution: '2027: Design methodology. 2028: Offer as part of the Diagnostic phase for partners with existing programs.'
+    },
+    'dialogue-mapping': {
+      name: 'Campus Dialogue Mapping',
+      status: 'planned',
+      desc: 'A comprehensive mapping of all dialogue-related activities across a campus — from formal programs to informal spaces — creating a picture of the full co-curricular dialogue ecosystem.',
+      evolution: '2027-28: Develop as a component of the diagnostic framework, likely owned by Culture Change team with Offerings support.'
+    },
+    'dfc': {
+      name: 'Dialogues for Change (DFC)',
+      status: 'exists',
+      desc: 'A deeper co-curricular program where students engage in sustained, facilitated dialogues on contentious topics over multiple sessions — building advanced skills in navigating disagreement.',
+      evolution: '2027: Shorter-format options. 2028: Connected to sustainment pathway and credentialing.'
+    },
+    'foundations': {
+      name: 'Foundations',
+      status: 'exists',
+      desc: 'CDI\'s introductory program providing baseline dialogue skills and shared vocabulary — often the first touchpoint for students before deeper engagement with DFC or Perspectives.',
+      evolution: '2027: Refresh content and add modular components. 2028: Position as the standard gateway into deeper co-curricular engagement.'
+    },
+    'encounter': {
+      name: 'Encounter',
+      status: 'exists',
+      desc: 'An experiential dialogue program that creates structured encounters between students who hold genuinely different views — designed to move beyond theoretical understanding into lived practice.',
+      evolution: '2027: Expand delivery model. 2028: Integrate with dialogue mapping and Sustainment phase pathway.'
+    },
+    'credentialing': {
+      name: 'Student Credentialing',
+      status: 'planned',
+      desc: 'A badge or micro-credential system recognizing student achievement in dialogue skills — creating visible incentives for participation and a way for students to signal these skills to employers.',
+      evolution: '2027-28: Research credentialing models, potentially align with NACE competencies. Light-lift initial version possible in 2027.'
+    },
+    't3-cert': {
+      name: 'T3 Certification (Student Leaders)',
+      status: 'in-dev',
+      desc: 'A pathway for student leaders to become certified peer facilitators of CDI programs — creating a sustainable student-driven delivery model that scales without proportional CDI staff investment.',
+      evolution: '2026-27: Scope two-tier model (facilitator + supervisor). 2028: Full certification with quality assurance framework.'
+    },
+
+    // P4 - Policies
+    'systemic-awareness-intro': {
+      name: 'Systemic Awareness Introduction',
+      status: 'planned',
+      desc: 'A short-format experience that helps campus leaders understand how institutional policies, processes, and structures either support or undermine a culture of constructive dialogue.',
+      evolution: '2027-28: Design as companion to Leadership Introduction, specifically framing P4 as the structural foundation for sustained culture change.'
+    },
+    'governance-audit': {
+      name: 'Governance & Policy Audit',
+      status: 'planned',
+      desc: 'A structured review of institutional governance documents, speech policies, protest protocols, and decision-making processes — identifying where policies create or resolve barriers to constructive dialogue.',
+      evolution: '2027: Design audit methodology. 2028: Offer as a diagnostic-stage offering for partners ready for structural work.'
+    },
+    'systemic-awareness-tools': {
+      name: 'Systemic Awareness Tools',
+      status: 'planned',
+      desc: 'A toolkit of frameworks, assessments, and facilitation guides that help institutions evaluate and improve their structural support for dialogue — from committee charters to conflict resolution processes.',
+      evolution: '2027-28: Develop alongside consulting engagements. Package learnings into reusable tools.'
+    },
+    'policy-audit-toolkit': {
+      name: 'Policy Audit Toolkit',
+      status: 'planned',
+      desc: 'A self-service version of the governance audit — structured templates and rubrics that institutional teams can use independently to assess their policy environment, with CDI consultation available as needed.',
+      evolution: '2028: Build based on learnings from bespoke consulting engagements in 2027.'
+    },
+
+    // P5 - Measurement
+    'campus-diagnostic': {
+      name: 'Campus Dialogue Diagnostic',
+      status: 'in-dev',
+      desc: 'The cornerstone of CDI\'s measurement infrastructure — a comprehensive assessment that evaluates an institution\'s dialogue health across all five pillars and engagement stages. The entry point for every partnership.',
+      evolution: '2026-27: Design and pilot core instrument. 2028: Full deployment as standard first step in every engagement.'
+    },
+    'baseline-measurement': {
+      name: 'Baseline Measurement',
+      status: 'in-dev',
+      desc: 'Pre-program data collection that establishes where students, faculty, and the institution stand before CDI intervention — enabling rigorous before/after impact assessment.',
+      evolution: '2026-27: Build as part of measurement infrastructure. 2028: Automated baseline collection integrated with program delivery.'
+    },
+    'longitudinal-analytics': {
+      name: 'Longitudinal Analytics',
+      status: 'planned',
+      desc: 'Multi-year tracking of dialogue skill development, campus climate, and institutional culture change — moving beyond single-program evaluation to understanding long-term impact trajectories.',
+      evolution: '2027: Design data architecture for longitudinal tracking. 2028: Dashboard for partners with 2+ years of data.'
+    },
+    'generative-assessment': {
+      name: 'Generative Assessment',
+      status: 'in-dev',
+      desc: 'AI-augmented assessment that goes beyond surveys — analyzing open-ended responses, dialogue transcripts, and behavioral data to generate richer, more nuanced measures of dialogue skill and institutional culture.',
+      evolution: '2026-27: Prototype with existing program data. 2028: Integrated into measurement suite as complement to traditional instruments.'
+    },
+    'measurement-lab': {
+      name: 'Measurement Lab',
+      status: 'planned',
+      desc: 'A research and development function where CDI continuously improves its measurement instruments, develops new assessment methodologies, and publishes findings — building CDI\'s authority as the measurement leader in this space.',
+      evolution: '2027-28: Establish as a function, potentially with academic partnerships. Publish first benchmarking reports.'
+    },
+    'benchmarking': {
+      name: 'Benchmarking Consortium',
+      status: 'planned',
+      desc: 'A peer comparison framework where partner institutions can see how their dialogue metrics compare to similar institutions — creating both accountability and healthy competition. Think COFHE but for dialogue.',
+      evolution: '2027-28: Design benchmarking methodology. Requires critical mass of diagnostic data from multiple partners.'
+    },
+    'state-of-dialogue': {
+      name: 'State of Dialogue Report',
+      status: 'planned',
+      desc: 'An annual or biennial publication aggregating data across CDI\'s partner network to describe the state of dialogue in American higher education — positioning CDI as the definitive source for this data.',
+      evolution: '2028+: Requires 3+ years of diagnostic data across a meaningful sample of institutions. Long-term vision, early groundwork in 2027.'
+    },
+
+    // Today-only offerings
+    'consulting-indirect': {
+      name: 'Consulting (Indirect P4 Impact)',
+      status: 'exists',
+      desc: 'Current CDI consulting that indirectly touches policy and governance issues — not yet a structured P4 offering, but existing engagements where policy questions arise organically through other work.',
+      evolution: '2027-28: Evolve into dedicated P4 offerings (governance audit, systemic awareness tools) rather than ad hoc policy conversations.'
+    },
+    'evidence-base': {
+      name: 'Evidence Base',
+      status: 'exists',
+      desc: 'CDI\'s existing body of research and program evaluation data — not yet packaged as a partner-facing measurement offering.',
+      evolution: '2027: Build on this foundation to create partner-facing diagnostic and measurement offerings. 2028: Evolve into the full measurement suite.'
+    },
+    'quiet-classroom': {
+      name: 'Quiet Classroom',
+      status: 'exists',
+      desc: 'A faculty workshop addressing the challenge of student silence in classroom discussion — building techniques and confidence for drawing out quieter voices and creating space for genuine dialogue in academic settings.',
+      evolution: '2027: Integrate into Faculty PD Pathway as a specialized module. 2028: Available as a configurable workshop component.'
+    },
+    'contested-facts': {
+      name: 'Contested Facts',
+      status: 'exists',
+      desc: 'A faculty workshop focused on teaching with politically charged or empirically contested content — helping faculty navigate moments where facts themselves become flashpoints for ideological conflict in the classroom.',
+      evolution: '2027: Integrate into Faculty PD Pathway as a specialized module. 2028: Available as a configurable workshop component.'
+    },
+    'task-forces': {
+      name: 'Task Forces & Custom Facilitation',
+      status: 'exists',
+      desc: 'Bespoke facilitation services for campus task forces, committees, or working groups navigating contentious institutional decisions — currently delivered as custom consulting engagements.',
+      evolution: '2027: Develop structured facilitation packages. 2028: Integrate with P4 governance audit and consulting offerings.'
+    }
+  };
+
+  function openProd(id) {
+    if (event) event.stopPropagation();
+    const p = products[id];
+    if (!p) return;
+    document.getElementById('pp-name').textContent = p.name;
+    const badge = document.getElementById('pp-badge');
+    badge.className = 'pp-badge ' + p.status;
+    badge.textContent = p.status === 'exists' ? '● Exists Today' : p.status === 'in-dev' ? '◐ In Development' : '○ Planned 2027–28';
+    document.getElementById('pp-desc').textContent = p.desc;
+    const evoLabel = document.getElementById('pp-evo-label');
+    const evo = document.getElementById('pp-evo');
+    if (p.evolution) {
+      evoLabel.textContent = 'What changes →';
+      evoLabel.style.display = 'block';
+      evo.textContent = p.evolution;
+      evo.style.display = 'block';
+    } else {
+      evoLabel.style.display = 'none';
+      evo.style.display = 'none';
+    }
+    document.getElementById('prod-popup-overlay').classList.add('open');
+  }
+
+  function closeProd() {
+    document.getElementById('prod-popup-overlay').classList.remove('open');
+  }
+</script>
+
+<!-- DEMO: AI SYLLABUS REVIEW TOOL -->
+<div class="demo-overlay" id="demo-syllabus">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('syllabus')">✕</button>
+    <div class="demo-badge">Concept Preview · 2027–28</div>
+    <div class="demo-title">AI Syllabus Review Tool</div>
+    <div class="demo-subtitle">A faculty member uploads their syllabus. The AI scans for moments where dialogue skills could be integrated into existing course design — then suggests specific, actionable modifications.</div>
+
+    <div class="wf-container">
+      <div class="wf-label">Agent Workflow</div>
+      <div class="wf-flow">
+        <div class="wf-step">
+          <div class="wf-step-icon">📄</div>
+          <div class="wf-step-name">Upload</div>
+          <div class="wf-step-desc">Faculty uploads syllabus PDF or course outline</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step" style="background: rgba(81,88,255,0.06);">
+          <div class="wf-step-icon">🤖</div>
+          <div class="wf-step-name">AI Scan</div>
+          <div class="wf-step-desc">Identifies assignments, discussions, readings where dialogue can embed</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-step-icon">💡</div>
+          <div class="wf-step-name">Suggestions</div>
+          <div class="wf-step-desc">Specific modifications: add perspective-taking prompts, restructure discussions</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-step-icon">✅</div>
+          <div class="wf-step-name">Faculty Review</div>
+          <div class="wf-step-desc">Accept, modify, or reject each suggestion. Export updated syllabus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-mockup">
+      <div class="wf-titlebar">
+        <div class="wf-dot-row"><div class="wf-dot-r"></div><div class="wf-dot-r"></div><div class="wf-dot-r"></div></div>
+        <div class="wf-titlebar-text">CDI · Syllabus Review · POLS 201: American Political Institutions</div>
+      </div>
+      <div class="wf-body">
+        <div style="font-size: 11px; color: var(--dim); margin-bottom: 10px;">3 integration opportunities found in your syllabus</div>
+        <div class="wf-suggestion">
+          <div class="wf-suggestion-icon">💬</div>
+          <div>
+            <strong style="color: white;">Week 6: "Federalism Debate" — Add Structured Dialogue</strong><br>
+            Your current assignment asks students to write a position paper. Consider adding a 30-minute structured dialogue <em>before</em> writing where students must articulate the strongest version of the opposing view. Research shows this increases nuance in written arguments by 40%.
+            <div style="margin-top: 6px;"><span style="color: var(--green); font-size: 10px; cursor: pointer;">✓ Accept</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✎ Modify</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✕ Skip</span></div>
+          </div>
+        </div>
+        <div class="wf-suggestion">
+          <div class="wf-suggestion-icon">🔄</div>
+          <div>
+            <strong style="color: white;">Week 9: "Supreme Court Case Analysis" — Perspective-Taking Prompt</strong><br>
+            Add a reflection prompt after case reading: "Which justice's reasoning do you find most difficult to understand? Write 200 words articulating why someone might find it compelling." Connects to Perspectives Module 3 (intellectual humility).
+            <div style="margin-top: 6px;"><span style="color: var(--green); font-size: 10px; cursor: pointer;">✓ Accept</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✎ Modify</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✕ Skip</span></div>
+          </div>
+        </div>
+        <div class="wf-suggestion">
+          <div class="wf-suggestion-icon">📋</div>
+          <div>
+            <strong style="color: white;">Week 12: "Policy Proposal Project" — Add Norms-Setting</strong><br>
+            Your group project lacks explicit dialogue norms. Consider adding CDI's 5-minute norms-setting exercise at the start of group work sessions. Template attached.
+            <div style="margin-top: 6px;"><span style="color: var(--green); font-size: 10px; cursor: pointer;">✓ Accept</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✎ Modify</span> &nbsp; <span style="color: var(--dim); font-size: 10px; cursor: pointer;">✕ Skip</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> This is how Pillar 2 becomes scalable at scale. Instead of flying facilitators to campuses for one-off workshops, an AI tool lets every faculty member integrate dialogue into their existing courses — asynchronously, on their own schedule, without requiring CDI in the room.
+    </div>
+  </div>
+</div>
+
+<!-- DEMO: PERSONALIZED PRACTICE (AI COACHING) -->
+<div class="demo-overlay" id="demo-coaching">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('coaching')">✕</button>
+    <div class="demo-badge">Launching May 2026</div>
+    <div class="demo-title">Personalized Practice</div>
+    <div class="demo-subtitle">Personalized, reflective feedback embedded directly inside Perspectives activities. The AI mirrors and questions — it never evaluates, ranks, or labels.</div>
+
+    <div class="wf-mockup">
+      <div class="wf-titlebar">
+        <div class="wf-dot-row"><div class="wf-dot-r"></div><div class="wf-dot-r"></div><div class="wf-dot-r"></div></div>
+        <div class="wf-titlebar-text">Perspectives · Module 4: Constructive Disagreement · Post-Activity Coaching</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-chat-bubble wf-chat-ai">
+          <div class="wf-chat-label" style="color: var(--cdi-light);">CDI Coach</div>
+          In the immigration dialogue, you asked two clarifying questions when the topic was abstract — but shifted to advocacy when it became personal. What do you notice about that pattern?
+        </div>
+        <div class="wf-chat-bubble wf-chat-user">
+          <div class="wf-chat-label" style="color: var(--dim);">Student</div>
+          I guess I get defensive when things feel close to my own experience
+        </div>
+        <div class="wf-chat-bubble wf-chat-ai">
+          <div class="wf-chat-label" style="color: var(--cdi-light);">CDI Coach</div>
+          That's a really honest observation. Many people find that proximity makes curiosity harder. Looking at your response in the exercise, what's one question you <em>could</em> have asked instead of the statement you made?
+        </div>
+        <div class="wf-chat-bubble wf-chat-user">
+          <div class="wf-chat-label" style="color: var(--dim);">Student</div>
+          Maybe "what shaped your view on this?" instead of "that's not how it works"
+        </div>
+        <div class="wf-chat-bubble wf-chat-ai">
+          <div class="wf-chat-label" style="color: var(--cdi-light);">CDI Coach</div>
+          That's a powerful reframe — it invites the other person's story rather than challenging their conclusion. This is something you can practice in your next in-person discussion. Notice when proximity triggers advocacy, and try one curiosity question before responding.
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> Every learner gets individualized reflection, not just content consumption. At scale, it's the difference between a course and a coaching experience. The AI does what a facilitator would do in a small group — but for every student, asynchronously, at the moment of learning.
+    </div>
+  </div>
+</div>
+
+<!-- DEMO: MEASUREMENT DASHBOARD -->
+<div class="demo-overlay" id="demo-measurement">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('measurement')">✕</button>
+    <div class="demo-badge">Concept Preview · 2027</div>
+    <div class="demo-title">Institutional Measurement Dashboard</div>
+    <div class="demo-subtitle">What a partner sees when they log into CDI's Measurement Learning Lab — cumulative impact across all CDI touchpoints, benchmarked against peer institutions.</div>
+
+    <div class="wf-mockup">
+      <div class="wf-titlebar">
+        <div class="wf-dot-row"><div class="wf-dot-r"></div><div class="wf-dot-r"></div><div class="wf-dot-r"></div></div>
+        <div class="wf-titlebar-text">CDI · Measurement Dashboard · Duke University · AY 2027–28</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-dashboard">
+          <div class="wf-metric">
+            <div class="wf-metric-val" style="color: var(--green);">4.3<span style="font-size: 14px; color: var(--dim);">/5</span></div>
+            <div class="wf-metric-label">Campus Dialogue<br>Climate Score</div>
+          </div>
+          <div class="wf-metric">
+            <div class="wf-metric-val" style="color: var(--cdi-light);">+18%</div>
+            <div class="wf-metric-label">Cross-Group<br>Participation YoY</div>
+          </div>
+          <div class="wf-metric">
+            <div class="wf-metric-val" style="color: var(--p3);">-23%</div>
+            <div class="wf-metric-label">Roommate Change<br>Requests YoY</div>
+          </div>
+        </div>
+        <div style="margin: 16px 0 8px; font-size: 11px; color: var(--dim);">Five Pillars Coverage vs. Peer Benchmark (Leadership Institute cohort)</div>
+        <div class="wf-bar-chart">
+          <div class="wf-bar" style="height: 75%; background: var(--p1);"><div class="wf-bar-label">P1</div></div>
+          <div class="wf-bar" style="height: 60%; background: var(--p2);"><div class="wf-bar-label">P2</div></div>
+          <div class="wf-bar" style="height: 90%; background: var(--p3);"><div class="wf-bar-label">P3</div></div>
+          <div class="wf-bar" style="height: 35%; background: var(--p4);"><div class="wf-bar-label">P4</div></div>
+          <div class="wf-bar" style="height: 45%; background: var(--p5);"><div class="wf-bar-label">P5</div></div>
+          <div style="width: 20px;"></div>
+          <div class="wf-bar" style="height: 55%; background: rgba(255,255,255,0.12);"><div class="wf-bar-label">Peer Avg</div></div>
+          <div class="wf-bar" style="height: 55%; background: rgba(255,255,255,0.12);"></div>
+          <div class="wf-bar" style="height: 55%; background: rgba(255,255,255,0.12);"></div>
+          <div class="wf-bar" style="height: 55%; background: rgba(255,255,255,0.12);"></div>
+          <div class="wf-bar" style="height: 55%; background: rgba(255,255,255,0.12);"></div>
+        </div>
+        <div style="margin-top: 24px; padding: 10px 12px; background: rgba(240,192,80,0.04); border: 1px solid rgba(240,192,80,0.1); border-radius: 8px; font-size: 11px; color: var(--text); line-height: 1.6;">
+          <strong style="color: var(--p5);">Insight:</strong> Duke's P3 (Co&#8209;Curricular) is significantly above peer average, driven by high Perspectives completion + DFC cohort. P4 (Policy) is below average — recommend Five Pillars consulting engagement focused on governance alignment. Roommate change request decline (-23%) is the strongest behavioral indicator this cycle.
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> This is what "Is it working?" looks like — answered. Funders see institutional-level behavioral change data, not just survey scores. The benchmarking consortium makes this a revenue offering — institutions pay to see how they compare. And the administrative data proxies (roommate changes, speaker cancellations) are more persuasive than any self-report survey.
+    </div>
+  </div>
+</div>
+
+<!-- DEMO: GENERATIVE ASSESSMENT -->
+<div class="demo-overlay" id="demo-genassess">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('genassess')">✕</button>
+    <div class="demo-badge">Concept Preview · 2027</div>
+    <div class="demo-title">Generative Assessment</div>
+    <div class="demo-subtitle">Instead of "You scored 7/10 on perspective-taking," learners receive narrative reflections that surface patterns and generate questions. The assessment models what it measures.</div>
+
+    <div style="display: flex; gap: 16px; margin: 16px 0; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 200px;">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 8px;">Traditional: Numeric Scoring</div>
+        <div style="background: rgba(224,96,96,0.04); border: 1px solid rgba(224,96,96,0.1); border-radius: 8px; padding: 14px; font-size: 12px; color: var(--dim); line-height: 1.6;">
+          Intellectual Humility: <strong style="color: white;">6.2/10</strong><br>
+          Perspective-Taking: <strong style="color: white;">7.8/10</strong><br>
+          Open-Mindedness: <strong style="color: white;">5.4/10</strong><br>
+          Constructive Disagreement: <strong style="color: white;">6.9/10</strong><br><br>
+          <em style="font-size: 11px;">Overall: Above average. Consider practicing active listening.</em>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 200px;">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 8px;">Augmented: Generative Narrative</div>
+        <div style="background: rgba(95,212,169,0.04); border: 1px solid rgba(95,212,169,0.1); border-radius: 8px; padding: 14px; font-size: 12px; color: var(--text); line-height: 1.6;">
+          Across your Perspectives journey, a pattern emerged: you engage deeply and curiously when topics are <strong style="color: white;">abstract or unfamiliar</strong> — asking genuine questions, holding uncertainty well. But when topics connect to your <strong style="color: white;">personal experience</strong>, you tend to shift into advocacy earlier.<br><br>
+          This isn't a flaw — it's a signal that <em>proximity matters</em> for you. The question worth sitting with: <strong style="color: var(--cdi-light);">What would it look like to bring the same curiosity you show strangers' perspectives to the perspectives closest to your own?</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> Numeric scores flatten the very thing we're trying to develop. A "6.2 in intellectual humility" doesn't help anyone grow. A generative narrative that names a specific pattern and asks a question <em>is</em> the practice of dialogue — the assessment becomes an extension of the pedagogy. Augments traditional scoring across all CDI offerings starting 2027.
+    </div>
+  </div>
+</div>
+
+<!-- DEMO: ENCOUNTER FACILITATOR DASHBOARD -->
+<div class="demo-overlay" id="demo-encounter">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('encounter')">✕</button>
+    <div class="demo-badge">Concept Preview · 2027</div>
+    <div class="demo-title">Encounter: Facilitator Dashboard</div>
+    <div class="demo-subtitle">Real-time dialogue mapping during facilitated sessions. Not what each individual brings — the quality of what emerges when perspectives meet.</div>
+
+    <div class="wf-mockup">
+      <div class="wf-titlebar">
+        <div class="wf-dot-row"><div class="wf-dot-r"></div><div class="wf-dot-r"></div><div class="wf-dot-r"></div></div>
+        <div class="wf-titlebar-text">Encounter · Live Session · "Campus Free Speech Policy" · 14 participants</div>
+      </div>
+      <div class="wf-body">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 200px;">
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); margin-bottom: 8px;">Participation Equity</div>
+            <div style="display: flex; gap: 4px; align-items: flex-end; height: 50px;">
+              <div style="flex:1; background: var(--p3); height: 90%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 70%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 45%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--yellow); height: 15%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 60%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--red); height: 5%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 55%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 40%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--yellow); height: 20%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 65%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--red); height: 8%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 35%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--p3); height: 50%; border-radius: 2px;"></div>
+              <div style="flex:1; background: var(--yellow); height: 18%; border-radius: 2px;"></div>
+            </div>
+            <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">3 participants below threshold — consider drawing in</div>
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); margin-bottom: 8px;">Perspective Coverage</div>
+            <div style="padding: 8px; background: rgba(255,255,255,0.02); border-radius: 6px; font-size: 11px; line-height: 1.8;">
+              <span style="color: var(--green);">●</span> Free expression absolutist <span style="color: var(--green); font-size: 9px;">EXPLORED</span><br>
+              <span style="color: var(--green);">●</span> Harm-prevention framing <span style="color: var(--green); font-size: 9px;">EXPLORED</span><br>
+              <span style="color: var(--yellow);">●</span> Institutional liability <span style="color: var(--yellow); font-size: 9px;">TOUCHED</span><br>
+              <span style="color: var(--red);">●</span> Economic framing <span style="color: var(--red); font-size: 9px;">MISSING</span>
+            </div>
+          </div>
+        </div>
+        <div class="wf-suggestion" style="margin-top: 14px;">
+          <div class="wf-suggestion-icon">🤖</div>
+          <div>
+            <strong style="color: var(--cdi-light);">Facilitator Suggestion:</strong> The economic framing hasn't been surfaced — no one has raised how speaker policies affect institutional fundraising or donor relations. Consider asking: "How might financial considerations shape a university's approach to this?"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> CDI currently measures individual learners. Encounter measures the <em>dialogue itself</em> — not "Did each person improve?" but "What happened between the perspectives?" This generates the measurement data (P5) that funders require, while giving facilitators real-time intelligence to improve the experience (P3). Built on 2026 intersubjective research. MVP target: 2027 with 10+ partners.
+    </div>
+  </div>
+</div>
+
+<!-- DEMO: TRAIN-THE-TRAINER PATHWAY -->
+<div class="demo-overlay" id="demo-t3">
+  <div class="demo-modal">
+    <button class="demo-close" onclick="closeDemo('t3')">✕</button>
+    <div class="demo-badge">Scoping Q3 2026 · Pilot H1 2027</div>
+    <div class="demo-title">Train-the-Trainer Certification Pathway</div>
+    <div class="demo-subtitle">How a campus professional goes from participant → certified CDI facilitator → institutional capacity that outlasts the partnership.</div>
+
+    <div class="wf-container">
+      <div class="wf-label">Certification Journey</div>
+      <div class="wf-pathway">
+        <div class="wf-pathway-step" style="--step-color: var(--p3);">
+          <div style="position: absolute; left: -6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--p3); background: var(--bg);"></div>
+          <div class="wf-pathway-content">
+            <div class="wf-pathway-name">1. Complete CDI Programs</div>
+            <div class="wf-pathway-desc">Perspectives + Foundations + DFC — the existing offering sequence. Prerequisite for certification.</div>
+          </div>
+        </div>
+        <div class="wf-pathway-step">
+          <div style="position: absolute; left: -6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--cdi-light); background: var(--bg);"></div>
+          <div class="wf-pathway-content">
+            <div class="wf-pathway-name">2. Trainer Curriculum</div>
+            <div class="wf-pathway-desc">CDI-specific training <em>for trainers</em> — facilitation theory, common failure modes, quality standards, adaptation guidelines. What CDI facilitators know beyond the content.</div>
+          </div>
+        </div>
+        <div class="wf-pathway-step">
+          <div style="position: absolute; left: -6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--yellow); background: var(--bg);"></div>
+          <div class="wf-pathway-content">
+            <div class="wf-pathway-name">3. Supervised Facilitation</div>
+            <div class="wf-pathway-desc">Two-tier model: in-person observation with a CDI master facilitator for initial sessions, then AI-augmented remote assessment for ongoing quality assurance. Scales supervision without proportionally scaling CDI headcount.</div>
+          </div>
+        </div>
+        <div class="wf-pathway-step">
+          <div style="position: absolute; left: -6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--green); background: var(--bg);"></div>
+          <div class="wf-pathway-content">
+            <div class="wf-pathway-name">4. CDI Certification</div>
+            <div class="wf-pathway-desc">Certified CDI Facilitator credential. LinkedIn badge. Annual license. Authorized to deliver Foundations and DFC independently on their campus.</div>
+          </div>
+        </div>
+        <div class="wf-pathway-step">
+          <div style="position: absolute; left: -6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--p5); background: var(--bg);"></div>
+          <div class="wf-pathway-content">
+            <div class="wf-pathway-name">5. Recertification &amp; QA</div>
+            <div class="wf-pathway-desc">Annual recertification. Measurement data on their sessions feeds back to CDI. Quality control without CDI in the room. Recurring licensing revenue.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin: 12px 0; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 180px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+        <div style="font-family: 'PT Sans Narrow', sans-serif; font-size: 22px; font-weight: 700; color: white;">Service</div>
+        <div style="font-size: 11px; color: var(--dim);">Current model:<br>CDI delivers every session</div>
+      </div>
+      <div style="display: flex; align-items: center; font-size: 20px; color: var(--cdi);">→</div>
+      <div style="flex: 1; min-width: 180px; padding: 12px; background: rgba(81,88,255,0.06); border: 1px solid rgba(81,88,255,0.12); border-radius: 8px; text-align: center;">
+        <div style="font-family: 'PT Sans Narrow', sans-serif; font-size: 22px; font-weight: 700; color: white;">Platform</div>
+        <div style="font-size: 11px; color: var(--cdi-light);">New model:<br>CDI certifies + licenses</div>
+      </div>
+    </div>
+
+    <div class="demo-why">
+      <strong>The impact:</strong> The revenue model shift — from selling hours to selling certification. From linear growth (more facilitators = more revenue) to exponential growth (more certified campuses = recurring licensing). And it's mission-aligned: the goal is a world that doesn't need CDI in the room. 80–90% of partnership calls already ask for it. Deals have been lost. The market is telling us.
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
